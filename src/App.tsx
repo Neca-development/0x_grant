@@ -1,11 +1,12 @@
-import './App.css';
-import { Outlet, Link } from "react-router-dom";
+import "./App.css";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
 function App() {
-  return (
-    <div className="bg-sky-500 h-screen">
-      <h1 className='text-8xl font-bold text-white text-center'>HA-HA-thon</h1>
-      {/* <nav
+	return (
+		<div className="">
+			<Header></Header>
+			{/* <nav
         style={{
           borderBottom: "solid 1px",
           paddingBottom: "1rem",
@@ -14,9 +15,9 @@ function App() {
         <Link to="/invoices">Invoices</Link> |{" "}
         <Link to="/expenses">Expenses</Link>
       </nav> */}
-      <Outlet />
-    </div>
-  );
+			<Outlet />
+		</div>
+	);
 }
 
 export default App;
