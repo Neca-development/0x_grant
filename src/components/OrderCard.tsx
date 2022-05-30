@@ -1,13 +1,13 @@
 import { FunctionComponent, useMemo } from "react";
 import unistoryLogo from "../assets/icons/unistory_logo.svg";
-import { IOrder, IToken } from "../models/interfaces";
+import { IOrder } from "../models/interfaces";
 
 export interface ITokenCardProps {
-	data: IToken;
+	data: IOrder;
 	onClick?(): void;
 }
 
-const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
+const OrderCard: FunctionComponent<ITokenCardProps> = (props) => {
 	const { data, onClick } = props;
 
 	const contractAddress = useMemo(
@@ -50,10 +50,13 @@ const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
 				<div className="text-dark-gray font-semibold mb-3">
 					{contractAddress}
 				</div>
-				<button className="text-blue font-bold">Pick to swap</button>
+				<div className="text-dark-gray font-medium mb-4">
+					Swap to: <span className="font-semibold">{data.tokenSymbol}</span>
+				</div>
+				<button className="text-blue font-bold">Offer overview</button>
 			</div>
 		</article>
 	);
 };
 
-export default TokenCard;
+export default OrderCard;
