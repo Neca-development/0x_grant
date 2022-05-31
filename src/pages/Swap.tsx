@@ -1,14 +1,14 @@
-import {FunctionComponent, useEffect, useMemo, useState} from "react";
-import {useLocation, useParams} from "react-router-dom";
-import {IOrder, IToken} from "../models/interfaces";
-import {useMoralis, useMoralisWeb3Api} from "react-moralis";
+import { JsonRpcProvider } from "@ethersproject/providers";
+import { Contract, ethers, utils } from "ethers";
+import { FunctionComponent, useEffect, useState } from "react";
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
+import { useLocation } from "react-router-dom";
+import exit from "../assets/icons/exit.svg";
+import swap from "../assets/icons/swap.svg";
 import unistoryLogo from "../assets/icons/unistory_logo.svg";
-import swap from "../assets/icons/swap.svg"
-import exit from "../assets/icons/exit.svg"
+import { defaultNftContractABI, nft2nftABI } from "../constants/abi";
 import ExecuterContractMethods from "../libs/nft2nft";
-import {defaultNftContractABI, nft2nftABI} from "../constants/abi";
-import {Contract, ethers, utils} from "ethers";
-import {JsonRpcProvider} from "@ethersproject/providers";
+import { IOrder, IToken } from "../models/interfaces";
 
 const TokenOverview: FunctionComponent<any> = ({data, id, collectionName, collectionAddress, image, deleteToken }) => {
 	console.log(data)
@@ -165,7 +165,7 @@ const Swap: FunctionComponent<any> = () => {
 						<div className="aspect-square overflow-auto w-3/4 bg-gray-200 rounded-2xl border-dashed border border-gray-500 p-6 grid grid-cols-2 gap-6 relative">
 							{tokens.map((token) => (
 								<div
-									key={token.id+token.collectionAddress}
+									key={token.id+token.contractAddress}
 									className="aspect-square bg-gray-500 flex-1 cursor-pointer"
 									onClick={() => setSelectedToken(token)}
 								>
