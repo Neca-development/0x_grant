@@ -41,11 +41,6 @@ pipeline {
 
       steps {
         build_image()
-        script {
-          if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "main") {
-            notify_slack('Production build success')
-          }
-        }
       }
     }
 
@@ -69,12 +64,10 @@ pipeline {
 
           steps {
             sh '''
-              cat >> .production.env << EOF
-              REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE}
-              GIT_REPO_NAME=${GIT_REPO_NAME}
-              BRANCH_NAME=${BRANCH_NAME}
-              CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
-              EOF
+              echo REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} >> .production.env
+              echo GIT_REPO_NAME=${GIT_REPO_NAME} >> .production.env
+              echo BRANCH_NAME=${BRANCH_NAME} >> .production.env
+              echo CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN} >> .production.env
 
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE bash -c "'
                 mkdir -p frontend
@@ -103,7 +96,7 @@ pipeline {
     failure {
       node(null) {
         script {
-          if (env.BRANCH_NAME == "development" || env.BRANCH_NAME == "master" || env.BRANCH_NAME == "main") {
+          if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "main") {
             notify_slack('Build failure')
           }
         }

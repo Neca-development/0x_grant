@@ -10,5 +10,6 @@ export interface IToken {
 	id: number;
 	collectionName: string;
 	image: string;
-	collectionAddress: string;
+	contractAddress: string;
+	symbol: string;
 }

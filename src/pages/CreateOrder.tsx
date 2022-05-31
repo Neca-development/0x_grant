@@ -1,10 +1,9 @@
+import { useEthers } from "@usedapp/core";
 import { useCallback, useEffect, useState } from "react";
-import { useApiContract, useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
-import { nft2nftABI } from "../constants/abi";
-import ExecuterContractMethods from "../libs/nft2nft";
+import useUserTokens from "../hooks/useUserNFTS";
 import { IToken } from "../models/interfaces";
 
 function CreateOrder() {
@@ -12,45 +11,24 @@ function CreateOrder() {
 	const [tokens, setTokens] = useState<IToken[]>([]);
 	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
 	const [wantedCollectionAddress, setWantedCollectionAddress] = useState("");
-	const {
-		authenticate,
-		isAuthenticated,
-		isAuthenticating,
-		user,
-		account,
-		logout,
-	} = useMoralis();
-	const Web3Api = useMoralisWeb3Api();
+	// const wethInterface = new utils.Interface(WethAbi);
+	// const wethContractAddress = "0xA243FEB70BaCF6cD77431269e68135cf470051b4";
+	// const contract = new Contract(wethContractAddress, wethInterface);
+	const { account } = useEthers();
 
-	const { runContractFunction, data, error, isLoading, isFetching } =
-		useApiContract({
-			address: "0x0D28de6586042efDa26Befd0d5B6627Ff59e1d45",
-			functionName: "createOrder",
-			abi: nft2nftABI,
-			params: {
-				offerItem: {
-					collection: tokenForSwap?.collectionAddress,
-					tokenId: tokenForSwap?.id,
-				},
-				considCollection: wantedCollectionAddress,
-			},
-		});
+	const getUserTokens = useUserTokens(account ?? "");
 
 	async function getUserNFTs() {
-		const address = user?.attributes.ethAddress;
-		const testnetNFTs = await Web3Api.Web3API.account.getNFTs({
-			chain: "rinkeby",
-			address,
-		});
+		console.log(await getUserTokens());
 
 		// @ts-ignore
 		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
 			const id = Number(token.token_id);
 			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
 			const collectionName = token.name;
-			const collectionAddress = token.token_address;
+			const contractAddress = token.token_address;
 
-			return { id, image, collectionName, collectionAddress };
+			return { id, image, collectionName, contractAddress };
 		});
 
 		setTokens(tokensResp);
@@ -61,8 +39,8 @@ function CreateOrder() {
 			if (
 				// @ts-ignore
 				tokenForSwap &&
-				tokenForSwap?.id + tokenForSwap.collectionAddress ===
-					token.id + token.collectionAddress
+				tokenForSwap?.id + tokenForSwap.contractAddress ===
+					token.id + token.contractAddress
 			)
 				return "border-blue";
 
@@ -72,39 +50,18 @@ function CreateOrder() {
 	);
 
 	const logOut = async () => {
-		await logout();
 		console.log("logged out");
 	};
 
 	const login = async () => {
-		let address = "";
-
-		await authenticate({ signingMessage: "Log in using Moralis" })
-			.then(function (user) {
-				console.log("logged in user:", user);
-				address = user!.get("ethAddress");
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-
 		getUserNFTs();
 	};
 
-	function createOrder() {
-		runContractFunction();
-	}
+	function createOrder() {}
 
-	useEffect(() => {
-		console.log(user);
+	// useEffect(() => {
 
-		if (isAuthenticated) {
-			getUserNFTs();
-			return;
-		}
-
-		login();
-	}, [isAuthenticated]);
+	// }, []);
 
 	return (
 		<div className="container mx-auto pt-12">
@@ -115,7 +72,7 @@ function CreateOrder() {
 			<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 				{tokens.map((token) => (
 					<TokenCard
-						key={token.id + token.collectionAddress}
+						key={token.id + token.contractAddress}
 						data={token}
 						onClick={() => setTokenForSwap(token)}
 						externalClasses={[isTokenSelected(token)]}

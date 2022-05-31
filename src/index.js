@@ -11,33 +11,68 @@ import FreeNft from './pages/FreeNft';
 import Home from './pages/Home';
 import Swap from './pages/Swap';
 import reportWebVitals from './reportWebVitals';
+import { Mainnet, DAppProvider, ChainId, Chain } from '@usedapp/core'
+import CreateOrder from './pages/CreateOrder';
+import MyOrders from './pages/MyOrders';
 
-const config = {
-  readOnlyChainId: ChainId.Rinkeby,
-  readOnlyUrls: {
-    [ChainId.Rinkeby]: getDefaultProvider('https://rinkeby.infura.io/v3/522b462c9a1d45fb9b3b18b5fda51c05'),
-  },
+
+// const config = {
+//   readOnlyChainId: ChainId.Rinkeby,
+//   readOnlyUrls: {
+//     [ChainId.Rinkeby]: getDefaultProvider('https://rinkeby.infura.io/v3/522b462c9a1d45fb9b3b18b5fda51c05'),
+//   },
+// }
+
+export const HPBChainConfig = {
+  chainId: 269,
+  chainName: 'HPBChain',
+  isTestChain: false,
+  isLocalChain: false,
+  multicallAddress: '0x0000000000000000000000000000000000000000',
+  getExplorerAddressLink: (address) => `https://hpbscan.org/address/${address}`,
+  getExplorerTransactionLink: (transactionHash) => `https://hpbscan.org/tx/${transactionHash}`,
+  // Optional parameters:
+  rpcUrl: 'https://hpbnode.com',
+  blockExplorerUrl: 'https://hpbscan.org',
+  nativeCurrency: {
+    name: 'HPBCoin',
+    symbol: 'HPB',
+    decimals: 18,
+  }
 }
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
 root.render(
   <React.StrictMode>
-    <MoralisProvider serverUrl="https://o77yntlxamoh.usemoralis.com:2053/server" appId="esMmHYJgsWYTb8xkxL32DiQ7JTh7AkbUGHOovo8t">
-      <DAppProvider config={config}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route index element={<Home />}></Route>
-              <Route path="swap" element={<Swap />}></Route>
-              <Route path="create-order" element={<CreateOrder />}></Route>
-              <Route path="free-nft" element={<FreeNft />}></Route>
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </DAppProvider>
-    </MoralisProvider>
+//     <MoralisProvider serverUrl="https://o77yntlxamoh.usemoralis.com:2053/server" appId="esMmHYJgsWYTb8xkxL32DiQ7JTh7AkbUGHOovo8t">
+//       <DAppProvider config={config}>
+//         <BrowserRouter>
+//           <Routes>
+//             <Route path="/" element={<App />}>
+//               <Route index element={<Home />}></Route>
+//               <Route path="swap" element={<Swap />}></Route>
+//               <Route path="create-order" element={<CreateOrder />}></Route>
+//               <Route path="free-nft" element={<FreeNft />}></Route>
+//             </Route>
+//           </Routes>
+//         </BrowserRouter>
+//       </DAppProvider>
+//     </MoralisProvider>
+
+    <DAppProvider config={HPBChainConfig}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<Home />}></Route>
+            <Route path="swap" element={<Swap />}></Route>
+            <Route path="create-order" element={<CreateOrder />}></Route>
+            <Route path="my-orders" element={<MyOrders />}></Route>
+            <Route path="free-nft" element={<FreeNft />}></Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </DAppProvider>
   </React.StrictMode>
 );
 

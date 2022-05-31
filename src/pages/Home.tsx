@@ -12,7 +12,7 @@ const nft2nft = new ExecuterContractMethods(
 	"0x0D28de6586042efDa26Befd0d5B6627Ff59e1d45",
 	"b28eca2ff9c249461cdfd738023b838d9282f7ec6b2564394f2633e112c547b2",
 	nft2nftABI,
-	"https://rinkeby.infura.io/v3/522b462c9a1d45fb9b3b18b5fda51c05"
+	"https://hpbnode.com"
 );
 
 function Home() {
@@ -31,9 +31,7 @@ function Home() {
 				const abi = new utils.Interface(defaultNftContractABI);
 				const signer = new ethers.Wallet(
 					"b28eca2ff9c249461cdfd738023b838d9282f7ec6b2564394f2633e112c547b2",
-					new JsonRpcProvider(
-						"https://rinkeby.infura.io/v3/522b462c9a1d45fb9b3b18b5fda51c05"
-					)
+					new JsonRpcProvider("https://hpbnode.com")
 				);
 				const contract = new Contract(order.offerItem.collection, abi, signer);
 				const offerContract = new Contract(order.considCollection, abi, signer);
