@@ -1,7 +1,9 @@
+import { useEthers } from "@usedapp/core";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
+import useUserTokens from "../hooks/useUserNFTS";
 import { IToken } from "../models/interfaces";
 
 function CreateOrder() {
@@ -12,16 +14,21 @@ function CreateOrder() {
 	// const wethInterface = new utils.Interface(WethAbi);
 	// const wethContractAddress = "0xA243FEB70BaCF6cD77431269e68135cf470051b4";
 	// const contract = new Contract(wethContractAddress, wethInterface);
+	const { account } = useEthers();
+
+	const getUserTokens = useUserTokens(account ?? "");
 
 	async function getUserNFTs() {
+		console.log(await getUserTokens());
+
 		// @ts-ignore
 		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
 			const id = Number(token.token_id);
 			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
 			const collectionName = token.name;
-			const collectionAddress = token.token_address;
+			const contractAddress = token.token_address;
 
-			return { id, image, collectionName, collectionAddress };
+			return { id, image, collectionName, contractAddress };
 		});
 
 		setTokens(tokensResp);
@@ -32,8 +39,8 @@ function CreateOrder() {
 			if (
 				// @ts-ignore
 				tokenForSwap &&
-				tokenForSwap?.id + tokenForSwap.collectionAddress ===
-					token.id + token.collectionAddress
+				tokenForSwap?.id + tokenForSwap.contractAddress ===
+					token.id + token.contractAddress
 			)
 				return "border-blue";
 
@@ -65,7 +72,7 @@ function CreateOrder() {
 			<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 				{tokens.map((token) => (
 					<TokenCard
-						key={token.id + token.collectionAddress}
+						key={token.id + token.contractAddress}
 						data={token}
 						onClick={() => setTokenForSwap(token)}
 						externalClasses={[isTokenSelected(token)]}

@@ -16,9 +16,9 @@ function MyOrders() {
 			const id = Number(token.token_id);
 			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
 			const collectionName = token.name;
-			const collectionAddress = token.token_address;
+			const contractAddress = token.token_address;
 
-			return { id, image, collectionName, collectionAddress };
+			return { id, image, collectionName, contractAddress };
 		});
 
 		setTokens(tokensResp);
@@ -29,8 +29,8 @@ function MyOrders() {
 			if (
 				// @ts-ignore
 				tokenForSwap &&
-				tokenForSwap?.id + tokenForSwap.collectionAddress ===
-					token.id + token.collectionAddress
+				tokenForSwap?.id + tokenForSwap.contractAddress ===
+					token.id + token.contractAddress
 			)
 				return "border-blue";
 
@@ -63,7 +63,7 @@ function MyOrders() {
 				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 					{tokens.map((token) => (
 						<TokenCard
-							key={token.id + token.collectionAddress}
+							key={token.id + token.contractAddress}
 							data={token}
 							onClick={() => setTokenForSwap(token)}
 							externalClasses={[isTokenSelected(token)]}
@@ -78,7 +78,7 @@ function MyOrders() {
 				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 					{tokens.map((token) => (
 						<TokenCard
-							key={token.id + token.collectionAddress}
+							key={token.id + token.contractAddress}
 							data={token}
 							onClick={() => setTokenForSwap(token)}
 							externalClasses={[isTokenSelected(token)]}

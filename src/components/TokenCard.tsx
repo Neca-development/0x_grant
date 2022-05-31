@@ -13,14 +13,14 @@ const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
 
 	const contractAddress = useMemo(
 		() =>
-			`${data.collectionAddress?.substring(
+			`${data.contractAddress?.substring(
 				0,
 				4
-			)}...${data.collectionAddress?.substring(
-				data.collectionAddress.length - 6,
-				data.collectionAddress.length
+			)}...${data.contractAddress?.substring(
+				data.contractAddress.length - 6,
+				data.contractAddress.length
 			)}`,
-		[data.collectionAddress]
+		[data.contractAddress]
 	);
 
 	return (
