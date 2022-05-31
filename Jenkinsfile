@@ -67,9 +67,9 @@ pipeline {
 
           steps {
             sh '''
-              cat REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} >> .production.env
-              cat GIT_REPO_NAME=${GIT_REPO_NAME} >> .production.env
-              cat BRANCH_NAME=${BRANCH_NAME} >> .production.env
+              echo REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} >> .production.env
+              echo GIT_REPO_NAME=${GIT_REPO_NAME} >> .production.env
+              echo BRANCH_NAME=${BRANCH_NAME} >> .production.env
 
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE bash -c "'
                 mkdir -p frontend
