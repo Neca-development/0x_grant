@@ -8,8 +8,6 @@ pipeline {
     SLACK_CHANNEL = 'C03HKNFUWDS'
     PRODUCTION_URL = 'https://nft2nft.win/'
     REMOTE_SSH_PROFILE = 'hackathon'
-    LOKI_PASSWORD =  credentials('loki-password')
-    LOKI_USER = credentials('loki-user')
   }
 
   stages {
