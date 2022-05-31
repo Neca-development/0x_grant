@@ -1,16 +1,16 @@
+import { ChainId, DAppProvider } from '@usedapp/core';
+import { getDefaultProvider } from 'ethers';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { MoralisProvider } from 'react-moralis';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Home from './pages/Home';
-import { getDefaultProvider } from 'ethers'
-import Swap from './pages/Swap';
-import { Mainnet, DAppProvider, ChainId } from '@usedapp/core'
+import './index.css';
 import CreateOrder from './pages/CreateOrder';
-import { MoralisProvider } from 'react-moralis';
-
+import FreeNft from './pages/FreeNft';
+import Home from './pages/Home';
+import Swap from './pages/Swap';
+import reportWebVitals from './reportWebVitals';
 
 const config = {
   readOnlyChainId: ChainId.Rinkeby,
@@ -32,6 +32,7 @@ root.render(
               <Route index element={<Home />}></Route>
               <Route path="swap" element={<Swap />}></Route>
               <Route path="create-order" element={<CreateOrder />}></Route>
+              <Route path="free-nft" element={<FreeNft />}></Route>
             </Route>
           </Routes>
         </BrowserRouter>
