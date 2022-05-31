@@ -1,5 +1,5 @@
 import { useEthers } from "@usedapp/core";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
@@ -19,7 +19,7 @@ function CreateOrder() {
 	const getUserTokens = useUserTokens(account ?? "");
 
 	async function getUserNFTs() {
-		console.log(await getUserTokens());
+		// console.log(await getUserTokens());
 
 		// @ts-ignore
 		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
