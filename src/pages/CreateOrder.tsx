@@ -2,6 +2,7 @@ import { useContractFunction } from "@usedapp/core";
 import { Contract, utils } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import Button from "../components/Button";
+import Spinner from "../components/Spinner";
 import TokenCard from "../components/TokenCard";
 import { defaultNftContractABI, nft2nftABI } from "../constants/abi";
 import useUserTokens from "../hooks/useUserNFTS";
@@ -75,6 +76,11 @@ function CreateOrder() {
 			<h2 className="font-semibold text-2xl mt-12">
 				Choose NFT to order creation
 			</h2>
+			{!userTokens && (
+				<div className="my-20">
+					<Spinner></Spinner>
+				</div>
+			)}
 			<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 				{userTokens?.map((token) => (
 					<TokenCard
