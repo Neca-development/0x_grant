@@ -7,6 +7,7 @@ import { useMemo } from "react";
 
 function Header() {
 	const { activateBrowserWallet, account } = useEthers();
+	const balance = useEtherBalance(account);
 
 	const walletAddress = useMemo(
 		() =>
@@ -25,9 +26,13 @@ function Header() {
 					<span className="font-semibold text-2xl ml-3">NFT 2 NFT</span>
 				</Link>
 				{account ? (
-					<Link to="/my-orders">
-						<Button text={"My orders"}></Button>
-					</Link>
+					<div>
+						<span className="font-semibold mr-4">{walletAddress}</span>
+						<span className="font-semibold mr-4">{balance?.toString()}</span>
+						<Link to="/my-orders">
+							<Button text={"My orders"}></Button>
+						</Link>
+					</div>
 				) : (
 					<Button
 						onClick={() => activateBrowserWallet()}

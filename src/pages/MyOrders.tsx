@@ -4,14 +4,11 @@ import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
 import { IToken } from "../models/interfaces";
 
-function CreateOrder() {
+function MyOrders() {
 	let navigate = useNavigate();
 	const [tokens, setTokens] = useState<IToken[]>([]);
 	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
 	const [wantedCollectionAddress, setWantedCollectionAddress] = useState("");
-	// const wethInterface = new utils.Interface(WethAbi);
-	// const wethContractAddress = "0xA243FEB70BaCF6cD77431269e68135cf470051b4";
-	// const contract = new Contract(wethContractAddress, wethInterface);
 
 	async function getUserNFTs() {
 		// @ts-ignore
@@ -58,35 +55,39 @@ function CreateOrder() {
 
 	return (
 		<div className="container mx-auto pt-12">
-			<h1 className="font-semibold text-4xl">Create order</h1>
-			<h2 className="font-semibold text-2xl mt-12">
-				Choose NFT to order creation
-			</h2>
-			<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
-				{tokens.map((token) => (
-					<TokenCard
-						key={token.id + token.collectionAddress}
-						data={token}
-						onClick={() => setTokenForSwap(token)}
-						externalClasses={[isTokenSelected(token)]}
-					></TokenCard>
-				))}
-			</div>
-			<h2 className="font-semibold text-2xl mt-12">Swap to</h2>
-			<input
-				type="text"
-				placeholder="Enter collection smart-contract adress"
-				className="rounded border border-black py-3 px-4 text-gray-600 font-semibold mt-8 w-1/3"
-				onChange={(e) => setWantedCollectionAddress(e.currentTarget.value)}
-			/>
-			<br />
-			<Button
-				text="Create order"
-				externalClasses={["bg-blue mt-12"]}
-				onClick={() => createOrder()}
-			></Button>
+			<h1 className="font-semibold text-4xl">My orders</h1>
+			<section>
+				<h2 className="font-semibold text-2xl mt-12">
+					Here you can check your orders
+				</h2>
+				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
+					{tokens.map((token) => (
+						<TokenCard
+							key={token.id + token.collectionAddress}
+							data={token}
+							onClick={() => setTokenForSwap(token)}
+							externalClasses={[isTokenSelected(token)]}
+						></TokenCard>
+					))}
+				</div>
+			</section>
+			<section>
+				<h2 className="font-semibold text-2xl mt-12">
+					For your NFT #00000 you got next offers:
+				</h2>
+				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
+					{tokens.map((token) => (
+						<TokenCard
+							key={token.id + token.collectionAddress}
+							data={token}
+							onClick={() => setTokenForSwap(token)}
+							externalClasses={[isTokenSelected(token)]}
+						></TokenCard>
+					))}
+				</div>
+			</section>
 		</div>
 	);
 }
 
-export default CreateOrder;
+export default MyOrders;
