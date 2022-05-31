@@ -1,23 +1,25 @@
 import NftCard from "../components/NftCard";
+import { useBuyUNIC, useBuyUNIS } from "../hooks/useMint";
 import { IToken } from "../models/interfaces";
 
 function FreeNft() {
   const tokens: IToken[] = [
     {
-      id: 1,
-      symbol: "Test 1",
+      tokenId: 1,
+      symbol: "UNIC",
       image: "",
-      collectionName: "Test 1",
+      collectionName: "UNIC",
       contractAddress: "1",
     },
     {
-      id: 2,
-      symbol: "Test 2",
+      tokenId: 2,
+      symbol: "UNIS",
       image: "",
-      collectionName: "Test 2",
+      collectionName: "UNIS",
       contractAddress: "2",
     },
   ];
+
 
   return (
     <div className="container mx-auto pt-12 bg-white">
@@ -27,11 +29,11 @@ function FreeNft() {
       <div className="flex justify-around">
         {tokens.map((token) => (
           <NftCard
-            key={token.id + token.contractAddress}
+            key={token.tokenId + token.contractAddress}
             data={token}
           ></NftCard>
         ))}
-      </div>
+    </div>
     </div>
   );
 }

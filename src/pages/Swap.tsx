@@ -165,11 +165,11 @@ const Swap: FunctionComponent<any> = () => {
 						<div className="aspect-square overflow-auto w-3/4 bg-gray-200 rounded-2xl border-dashed border border-gray-500 p-6 grid grid-cols-2 gap-6 relative">
 							{tokens.map((token) => (
 								<div
-									key={token.id+token.contractAddress}
+									key={token.tokenId+token.contractAddress}
 									className="aspect-square bg-gray-500 flex-1 cursor-pointer"
 									onClick={() => setSelectedToken(token)}
 								>
-									{token.id}
+									{token.tokenId}
 								</div>
 							))}
 							{tokens.length === 0 && (
