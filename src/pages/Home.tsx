@@ -88,7 +88,7 @@ function Home() {
 					<OrderCard
 						key={order.id + order.collectionAddress}
 						data={order}
-						onClick={() => navigate("/swap")}
+						onClick={() => navigate("/swap", { state: order })}
 					></OrderCard>
 				))}
 			</div>
