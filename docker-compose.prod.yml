@@ -7,8 +7,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`nft2nft.win`) && PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=le"
     networks:
       - default
 
@@ -16,10 +15,11 @@ services:
     image: traefik:2.7
     command:
       - "--api.insecure=false"
-      - "--certificatesresolvers.letsencrypt.acme.email=danils@unistory.app"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesResolvers.sample.acme.dnsChallenge.delayBeforeCheck=0"
+      - "--certificatesresolvers.le.acme.email=danils@unistory.app"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.le.acme.dnschallenge=true"
+      - "--certificatesresolvers.le.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.le.acme.dnsChallenge.delayBeforeCheck=0"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
@@ -27,6 +27,8 @@ services:
       - "--log.level=WARN"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+    environment:
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
     ports:
       - "80:80"
       - "443:443"

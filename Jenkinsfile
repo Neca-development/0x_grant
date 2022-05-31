@@ -73,7 +73,6 @@ pipeline {
               REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE}
               GIT_REPO_NAME=${GIT_REPO_NAME}
               BRANCH_NAME=${BRANCH_NAME}
-              CF_API_EMAIL=${CF_API_EMAIL}
               CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
               EOF
 
