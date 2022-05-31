@@ -1,42 +1,14 @@
-import { useEthers } from "@usedapp/core";
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
 import useUserTokens from "../hooks/useUserNFTS";
 import { IToken } from "../models/interfaces";
 
 function CreateOrder() {
-	let navigate = useNavigate();
-	const [tokens, setTokens] = useState<IToken[]>([]);
 	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
 	const [wantedCollectionAddress, setWantedCollectionAddress] = useState("");
-	// const wethInterface = new utils.Interface(WethAbi);
-	// const wethContractAddress = "0xA243FEB70BaCF6cD77431269e68135cf470051b4";
-	// const contract = new Contract(wethContractAddress, wethInterface);
-	const { account } = useEthers();
 
-
-// 	const getUserTokens = useUserTokens(account ?? "");
-
-// 	async function getUserNFTs() {
-// 		// console.log(await getUserTokens());
-
-// 		// @ts-ignore
-// 		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
-// 			const id = Number(token.token_id);
-// 			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
-// 			const collectionName = token.name;
-// 			const contractAddress = token.token_address;
-
-// 			return { id, image, collectionName, contractAddress };
-// 		});
-
-// 		setTokens(tokensResp);
-// 	}
-
-// 	const userTokens = useUserTokens();
-
+	const userTokens = useUserTokens();
 
 	const isTokenSelected = useCallback(
 		(token: IToken) => {
