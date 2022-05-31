@@ -11,4 +11,5 @@ export interface IToken {
 	collectionName: string;
 	image: string;
 	contractAddress: string;
+	symbol: string;
 }
