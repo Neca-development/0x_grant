@@ -7,7 +7,7 @@ export interface IOrder {
 }
 
 export interface IToken {
-	id: number;
+	tokenId: number;
 	collectionName: string;
 	image: string;
 	contractAddress: string;

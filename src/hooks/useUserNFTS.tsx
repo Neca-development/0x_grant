@@ -1,12 +1,16 @@
+import { JsonRpcProvider } from "@ethersproject/providers";
+import { useEthers } from "@usedapp/core";
 import axios from "axios";
-import { BigNumber } from "ethers";
-import { useState } from "react";
+import { BigNumber, ethers } from "ethers";
+import { useEffect, useRef, useState } from "react";
+import { defaultNftContractABI } from "../constants/abi";
 
 interface TokenModel {
 	contractAddress: string;
 	symbol: string;
 	collectionName: string;
 	tokenId: number;
+	image: string;
 }
 
 interface TxModel {
@@ -15,6 +19,7 @@ interface TxModel {
 	tokenSymbol: string;
 	tokenName: string;
 	tokenID: string;
+	image: string;
 }
 
 class HPBScanner {
@@ -34,10 +39,10 @@ class HPBScanner {
 		return (await axios.get(`${this.getBaseUrl()}?${params}`)).data.data;
 	}
 
-	private parseTx(txs: TxModel[]): TokenModel[] {
+	private async parseTx(txs: TxModel[]): Promise<TokenModel[]> {
 		let result: TokenModel[] = [];
 
-		for (const tx of txs) {
+		for await (const tx of txs) {
 			if (tx.from == this.walletAddress) {
 				const tokenId = this.convertToNumber(tx.tokenID);
 				const contractAddress = tx.contractAddress;
@@ -48,11 +53,26 @@ class HPBScanner {
 				continue;
 			}
 
+			const signer = new ethers.Wallet(
+				"b28eca2ff9c249461cdfd738023b838d9282f7ec6b2564394f2633e112c547b2",
+				new JsonRpcProvider("https://hpbnode.com")
+			);
+			const contract = new ethers.Contract(
+				tx.contractAddress,
+				defaultNftContractABI,
+				signer
+			);
+			const metadata = await contract.tokenURI(tx.tokenID);
+
+			const { image } = eval(
+				"(" + (await fetch(metadata).then((response) => response.text())) + ")"
+			);
 			result.push({
 				contractAddress: tx.contractAddress,
 				symbol: tx.tokenSymbol,
 				collectionName: tx.tokenName,
 				tokenId: this.convertToNumber(tx.tokenID),
+				image,
 			});
 		}
 
@@ -73,15 +93,26 @@ class HPBScanner {
 	}
 }
 
-export default async function useUserTokens(address: string) {
-	const [scannerInstance] = useState(new HPBScanner(address));
+export default function useUserTokens() {
+	const { account } = useEthers();
+	const [userTokens, setUserTokens] = useState<TokenModel[]>();
 
-	return scannerInstance.getTokens;
+	useEffect(() => {
+		(async () => {
+			if (!account) return;
+			console.log("====================================");
+			console.log("update");
+			console.log("====================================");
+			setUserTokens(await new HPBScanner(account).getTokens());
+		})();
+	}, [account]);
+
+	return userTokens;
 }
 
 // ------------------------------TEST-----------------------------------
 
-const t = new HPBScanner("0xF194Bd9Ca650CebFAe39340cb44629d9ad986C01");
-t.getTokens().then((res) => console.log(res));
+// const t = new HPBScanner("0xF194Bd9Ca650CebFAe39340cb44629d9ad986C01");
+// t.getTokens().then((res) => console.log(res));
 
 // -----------------------------/TEST-----------------------------------
