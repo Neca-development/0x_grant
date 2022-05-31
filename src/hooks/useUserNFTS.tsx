@@ -73,7 +73,7 @@ class HPBScanner {
 	}
 }
 
-export default function useUserTokens(address: string) {
+export default async function useUserTokens(address: string) {
 	const [scannerInstance] = useState(new HPBScanner(address));
 
 	return scannerInstance.getTokens;
