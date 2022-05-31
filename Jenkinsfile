@@ -67,21 +67,24 @@ pipeline {
 
           steps {
             sh '''
+              cat REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} >> .production.env
+              cat GIT_REPO_NAME=${GIT_REPO_NAME} >> .production.env
+              cat BRANCH_NAME=${BRANCH_NAME} >> .production.env
+
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE bash -c "'
                 mkdir -p frontend
               '"
 
               scp docker-compose.yml $REMOTE_SSH_PROFILE:frontend
               scp docker-compose.prod.yml $REMOTE_SSH_PROFILE:frontend
+              scp .production.env $REMOTE_SSH_PROFILE:frontend
 
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE \
-                REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} \
-                GIT_REPO_NAME=${GIT_REPO_NAME} \
-                BRANCH_NAME=${BRANCH_NAME} \
                 bash -c "'
                   cd frontend
-                  docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
-                  docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+                  docker login ${REGISTRY_HOST_REMOTE}
+                  docker-compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .production.env pull
+                  docker-compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .production.env up -d
                   docker image prune
                 '"
             '''
