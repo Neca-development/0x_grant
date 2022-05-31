@@ -5,10 +5,11 @@ import { IOrder, IToken } from "../models/interfaces";
 export interface ITokenCardProps {
 	data: IToken;
 	onClick?(): void;
+	externalClasses?: string[];
 }
 
 const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
-	const { data, onClick } = props;
+	const { data, onClick, externalClasses } = props;
 
 	const contractAddress = useMemo(
 		() =>
@@ -25,7 +26,7 @@ const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
 	return (
 		<article
 			onClick={onClick}
-			className="rounded-lg overflow-hidden border border-gray-100 shadow-[4px_4px_10px_rgba(224,224,224,0.25)] cursor-pointer hover:border-blue"
+			className={`rounded-lg overflow-hidden border border-gray-100 shadow-[4px_4px_10px_rgba(224,224,224,0.25)] cursor-pointer ${externalClasses}`}
 		>
 			<div className="aspect-square bg-gray-200 relative flex">
 				{data.image ? (
