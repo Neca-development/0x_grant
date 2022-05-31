@@ -4,14 +4,14 @@ import { IToken } from "../models/interfaces";
 function FreeNft() {
   const tokens: IToken[] = [
     {
-      id: 1,
+      tokenId: 1,
       symbol: "Test 1",
       image: "",
       collectionName: "Test 1",
       contractAddress: "1",
     },
     {
-      id: 2,
+      tokenId: 2,
       symbol: "Test 2",
       image: "",
       collectionName: "Test 2",
@@ -27,7 +27,7 @@ function FreeNft() {
       <div className="flex justify-around">
         {tokens.map((token) => (
           <NftCard
-            key={token.id + token.contractAddress}
+            key={token.tokenId + token.contractAddress}
             data={token}
           ></NftCard>
         ))}
