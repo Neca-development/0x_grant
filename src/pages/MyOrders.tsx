@@ -1,57 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import Button from "../components/Button";
-import TokenCard from "../components/TokenCard";
-import { IToken } from "../models/interfaces";
+import OrderCard from "../components/OrderCard";
+import Spinner from "../components/Spinner";
+import useOrders from "../hooks/useOrders";
 
 function MyOrders() {
-	let navigate = useNavigate();
-	const [tokens, setTokens] = useState<IToken[]>([]);
-	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
-	const [wantedCollectionAddress, setWantedCollectionAddress] = useState("");
-
-	async function getUserNFTs() {
-		// @ts-ignore
-		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
-			const id = Number(token.token_id);
-			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
-			const collectionName = token.name;
-			const contractAddress = token.token_address;
-
-			return { id, image, collectionName, contractAddress };
-		});
-
-		setTokens(tokensResp);
-	}
-
-	const isTokenSelected = useCallback(
-		(token: IToken) => {
-			if (
-				// @ts-ignore
-				tokenForSwap &&
-				tokenForSwap?.tokenId + tokenForSwap.contractAddress ===
-					token.tokenId + token.contractAddress
-			)
-				return "border-blue";
-
-			return "";
-		},
-		[tokenForSwap]
-	);
-
-	const logOut = async () => {
-		console.log("logged out");
-	};
-
-	const login = async () => {
-		getUserNFTs();
-	};
-
-	function createOrder() {}
-
-	// useEffect(() => {
-
-	// }, []);
+	const orders = useOrders();
 
 	return (
 		<div className="container mx-auto pt-12">
@@ -60,14 +12,17 @@ function MyOrders() {
 				<h2 className="font-semibold text-2xl mt-12">
 					Here you can check your orders
 				</h2>
+				{!orders && (
+					<div className="my-20">
+						<Spinner></Spinner>
+					</div>
+				)}
 				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
-					{tokens.map((token) => (
-						<TokenCard
-							key={token.tokenId + token.contractAddress}
-							data={token}
-							onClick={() => setTokenForSwap(token)}
-							externalClasses={[isTokenSelected(token)]}
-						></TokenCard>
+					{orders?.map((order) => (
+						<OrderCard
+							key={order.id + order.collectionAddress}
+							data={order}
+						></OrderCard>
 					))}
 				</div>
 			</section>
@@ -76,13 +31,11 @@ function MyOrders() {
 					For your NFT #00000 you got next offers:
 				</h2>
 				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
-					{tokens.map((token) => (
-						<TokenCard
-							key={token.tokenId + token.contractAddress}
-							data={token}
-							onClick={() => setTokenForSwap(token)}
-							externalClasses={[isTokenSelected(token)]}
-						></TokenCard>
+					{orders?.map((order) => (
+						<OrderCard
+							key={order.id + order.collectionAddress}
+							data={order}
+						></OrderCard>
 					))}
 				</div>
 			</section>

@@ -1,70 +1,21 @@
-import { JsonRpcProvider } from "@ethersproject/providers";
-import { Contract, ethers, utils } from "ethers";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import OrderCard from "../components/OrderCard";
-import { defaultNftContractABI, nft2nftABI } from "../constants/abi";
-import ExecuterContractMethods from "../libs/nft2nft";
-import { IOrder } from "../models/interfaces";
 import searchIcon from "../assets/icons/search.svg";
-
-const nft2nft = new ExecuterContractMethods(
-	"0x3545d1C36338308FF6116B27f748389B32B18E33",
-	"007255c435e073b94033b10bf89aeb56130566949e87c185b5810670cc7b7bd6",
-	nft2nftABI,
-	"https://hpbnode.com"
-);
+import useOrders from "../hooks/useOrders";
+import Spinner from "../components/Spinner";
 
 function Home() {
 	let navigate = useNavigate();
-	const [orders, setOrders] = useState<IOrder[]>([]);
 	const [search, setSearch] = useState("");
+	const orders = useOrders();
 
 	const filteredOrders = useMemo(() => {
 		if (search.trim() === "") return orders;
 
-		return orders.filter((order) => order.collectionAddress.includes(search));
+		return orders?.filter((order) => order.collectionAddress.includes(search));
 	}, [orders, search]);
-
-	useEffect(() => {
-		(async () => {
-			const data = await nft2nft.getOrders();
-			const ordersResp: IOrder[] = [];
-
-			for await (const order of data) {
-				console.log(order);
-
-				const id = order.offerItem.tokenId.toNumber();
-				const abi = new utils.Interface(defaultNftContractABI);
-				const signer = new ethers.Wallet(
-					"b28eca2ff9c249461cdfd738023b838d9282f7ec6b2564394f2633e112c547b2",
-					new JsonRpcProvider("https://hpbnode.com")
-				);
-				const contract = new Contract(order.offerItem.collection, abi, signer);
-				const offerContract = new Contract(order.considCollection, abi, signer);
-
-				const collectionName = await contract.name();
-				const tokenSymbol = await offerContract.symbol();
-				const tokenURI = await contract.tokenURI(id);
-				const { image } = eval(
-					"(" + (await fetch(tokenURI).then((res) => res.text())) + ")"
-				);
-
-				ordersResp.push({
-					id,
-					collectionName,
-					image,
-					collectionAddress: order.offerItem.collection,
-					tokenSymbol,
-				});
-			}
-
-			console.log(ordersResp);
-
-			setOrders(ordersResp);
-		})();
-	}, []);
 
 	return (
 		<div className="container mx-auto pt-12">
@@ -100,8 +51,13 @@ function Home() {
 					onClick={() => navigate("/create-order")}
 				></Button>
 			</div>
+			{!filteredOrders && (
+				<div className="my-20">
+					<Spinner></Spinner>
+				</div>
+			)}
 			<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
-				{filteredOrders.map((order) => (
+				{filteredOrders?.map((order) => (
 					<OrderCard
 						key={order.id + order.collectionAddress}
 						data={order}
