@@ -96,7 +96,7 @@ pipeline {
     failure {
       node(null) {
         script {
-          if (env.BRANCH_NAME == "development" || env.BRANCH_NAME == "master" || env.BRANCH_NAME == "main") {
+          if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "main") {
             notify_slack('Build failure')
           }
         }
