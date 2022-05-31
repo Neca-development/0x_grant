@@ -73,7 +73,6 @@ pipeline {
 
               scp docker-compose.yml $REMOTE_SSH_PROFILE:frontend
               scp docker-compose.prod.yml $REMOTE_SSH_PROFILE:frontend
-              scp .env $REMOTE_SSH_PROFILE:frontend
 
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE \
                 REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} \
