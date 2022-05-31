@@ -9,7 +9,7 @@ import ExecuterContractMethods from "../libs/nft2nft";
 import { IOrder } from "../models/interfaces";
 
 const nft2nft = new ExecuterContractMethods(
-	"0x0D28de6586042efDa26Befd0d5B6627Ff59e1d45",
+	"0x3545d1C36338308FF6116B27f748389B32B18E33",
 	"b28eca2ff9c249461cdfd738023b838d9282f7ec6b2564394f2633e112c547b2",
 	nft2nftABI,
 	"https://hpbnode.com"

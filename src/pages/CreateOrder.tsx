@@ -16,31 +16,35 @@ function CreateOrder() {
 	// const contract = new Contract(wethContractAddress, wethInterface);
 	const { account } = useEthers();
 
-	const getUserTokens = useUserTokens(account ?? "");
 
-	async function getUserNFTs() {
-		// console.log(await getUserTokens());
+// 	const getUserTokens = useUserTokens(account ?? "");
 
-		// @ts-ignore
-		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
-			const id = Number(token.token_id);
-			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
-			const collectionName = token.name;
-			const contractAddress = token.token_address;
+// 	async function getUserNFTs() {
+// 		// console.log(await getUserTokens());
 
-			return { id, image, collectionName, contractAddress };
-		});
+// 		// @ts-ignore
+// 		const tokensResp: IToken[] = testnetNFTs.result?.map((token) => {
+// 			const id = Number(token.token_id);
+// 			const { image } = JSON.parse(token.metadata ?? '{"image":null}');
+// 			const collectionName = token.name;
+// 			const contractAddress = token.token_address;
 
-		setTokens(tokensResp);
-	}
+// 			return { id, image, collectionName, contractAddress };
+// 		});
+
+// 		setTokens(tokensResp);
+// 	}
+
+// 	const userTokens = useUserTokens();
+
 
 	const isTokenSelected = useCallback(
 		(token: IToken) => {
 			if (
 				// @ts-ignore
 				tokenForSwap &&
-				tokenForSwap?.id + tokenForSwap.contractAddress ===
-					token.id + token.contractAddress
+				tokenForSwap?.tokenId + tokenForSwap.contractAddress ===
+					token.tokenId + token.contractAddress
 			)
 				return "border-blue";
 
@@ -49,19 +53,7 @@ function CreateOrder() {
 		[tokenForSwap]
 	);
 
-	const logOut = async () => {
-		console.log("logged out");
-	};
-
-	const login = async () => {
-		getUserNFTs();
-	};
-
 	function createOrder() {}
-
-	// useEffect(() => {
-
-	// }, []);
 
 	return (
 		<div className="container mx-auto pt-12">
@@ -70,9 +62,9 @@ function CreateOrder() {
 				Choose NFT to order creation
 			</h2>
 			<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
-				{tokens.map((token) => (
+				{userTokens?.map((token) => (
 					<TokenCard
-						key={token.id + token.contractAddress}
+						key={token.tokenId + token.contractAddress}
 						data={token}
 						onClick={() => setTokenForSwap(token)}
 						externalClasses={[isTokenSelected(token)]}

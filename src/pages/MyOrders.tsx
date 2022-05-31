@@ -29,8 +29,8 @@ function MyOrders() {
 			if (
 				// @ts-ignore
 				tokenForSwap &&
-				tokenForSwap?.id + tokenForSwap.contractAddress ===
-					token.id + token.contractAddress
+				tokenForSwap?.tokenId + tokenForSwap.contractAddress ===
+					token.tokenId + token.contractAddress
 			)
 				return "border-blue";
 
@@ -63,7 +63,7 @@ function MyOrders() {
 				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 					{tokens.map((token) => (
 						<TokenCard
-							key={token.id + token.contractAddress}
+							key={token.tokenId + token.contractAddress}
 							data={token}
 							onClick={() => setTokenForSwap(token)}
 							externalClasses={[isTokenSelected(token)]}
@@ -78,7 +78,7 @@ function MyOrders() {
 				<div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
 					{tokens.map((token) => (
 						<TokenCard
-							key={token.id + token.contractAddress}
+							key={token.tokenId + token.contractAddress}
 							data={token}
 							onClick={() => setTokenForSwap(token)}
 							externalClasses={[isTokenSelected(token)]}

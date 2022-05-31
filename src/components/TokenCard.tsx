@@ -43,7 +43,7 @@ const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
 			</div>
 			<div className="p-3">
 				<div className="text-dark-gray font-semibold text-sm mb-1">
-					{data.id}
+					{data.tokenId}
 				</div>
 				<div className="text-dark-gray font-semibold mb-3">
 					{data.collectionName}
