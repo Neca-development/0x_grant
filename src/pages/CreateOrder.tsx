@@ -1,15 +1,16 @@
 import { useContractFunction } from "@usedapp/core";
 import { Contract, utils } from "ethers";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
-import { nft2nftABI } from "../constants/abi";
+import { defaultNftContractABI, nft2nftABI } from "../constants/abi";
 import useUserTokens from "../hooks/useUserNFTS";
 import { IToken } from "../models/interfaces";
 
 function CreateOrder() {
 	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
 	const [considCollection, setConsidCollection] = useState("");
+	const [nftContract, setNftContract] = useState();
 
 	const userTokens = useUserTokens();
 
@@ -19,6 +20,14 @@ function CreateOrder() {
 	const { state, send } = useContractFunction(contract, "createOrder", {
 		transactionName: "Wrap",
 	});
+
+	const { state: approveState, send: approveSend } = useContractFunction(
+		nftContract,
+		"approve",
+		{
+			transactionName: "Wrap",
+		}
+	);
 
 	const isTokenSelected = useCallback(
 		(token: IToken) => {
@@ -36,12 +45,29 @@ function CreateOrder() {
 	);
 
 	function createOrder() {
+		if (!tokenForSwap) return;
+
+		// approveSend(tokenForSwap.contractAddress, tokenForSwap.tokenId);
 		const offerItem = {
 			collection: tokenForSwap?.contractAddress,
 			tokenId: tokenForSwap?.tokenId,
 		};
 		send(offerItem, considCollection, { gasLimit: 50000 });
 	}
+
+	useEffect(() => {
+		if (tokenForSwap) {
+			const contract = new Contract(
+				tokenForSwap?.contractAddress,
+				defaultNftContractABI
+			) as any;
+			setNftContract(contract);
+		}
+	}, [tokenForSwap]);
+
+	useEffect(() => {
+		console.log(approveState.status);
+	}, [approveState]);
 
 	return (
 		<div className="container mx-auto pt-12">
