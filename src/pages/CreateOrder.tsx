@@ -1,14 +1,24 @@
+import { useContractFunction } from "@usedapp/core";
+import { Contract, utils } from "ethers";
 import { useCallback, useState } from "react";
 import Button from "../components/Button";
 import TokenCard from "../components/TokenCard";
+import { nft2nftABI } from "../constants/abi";
 import useUserTokens from "../hooks/useUserNFTS";
 import { IToken } from "../models/interfaces";
 
 function CreateOrder() {
 	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
-	const [wantedCollectionAddress, setWantedCollectionAddress] = useState("");
+	const [considCollection, setConsidCollection] = useState("");
 
 	const userTokens = useUserTokens();
+
+	const wethAddress = "0x3545d1C36338308FF6116B27f748389B32B18E33";
+	const wethInterface = new utils.Interface(nft2nftABI);
+	const contract = new Contract(wethAddress, wethInterface) as any;
+	const { state, send } = useContractFunction(contract, "createOrder", {
+		transactionName: "Wrap",
+	});
 
 	const isTokenSelected = useCallback(
 		(token: IToken) => {
@@ -25,7 +35,13 @@ function CreateOrder() {
 		[tokenForSwap]
 	);
 
-	function createOrder() {}
+	function createOrder() {
+		const offerItem = {
+			collection: tokenForSwap?.contractAddress,
+			tokenId: tokenForSwap?.tokenId,
+		};
+		send(offerItem, considCollection);
+	}
 
 	return (
 		<div className="container mx-auto pt-12">
@@ -48,7 +64,7 @@ function CreateOrder() {
 				type="text"
 				placeholder="Enter collection smart-contract adress"
 				className="rounded border border-black py-3 px-4 text-gray-600 font-semibold mt-8 w-1/3"
-				onChange={(e) => setWantedCollectionAddress(e.currentTarget.value)}
+				onChange={(e) => setConsidCollection(e.currentTarget.value)}
 			/>
 			<br />
 			<Button

@@ -38,9 +38,9 @@ function Home() {
 
 				const collectionName = await contract.name();
 				const tokenSymbol = await offerContract.symbol();
-
-				const { image } = await fetch("https://burnking.io/api/meta/6").then(
-					(res) => res.json()
+				const tokenURI = await contract.tokenURI(id);
+				const { image } = eval(
+					"(" + (await fetch(tokenURI).then((res) => res.text())) + ")"
 				);
 
 				ordersResp.push({
