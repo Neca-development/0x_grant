@@ -17,8 +17,9 @@ services:
     command:
       - "--api.insecure=false"
       - "--certificatesresolvers.letsencrypt.acme.email=danils@unistory.app"
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesResolvers.sample.acme.dnsChallenge.delayBeforeCheck=0"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
@@ -31,7 +32,7 @@ services:
       - "443:443"
       - "127.0.0.1::8080"
     volumes:
-      - "./acme.json:/acme.json"
+      - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - default

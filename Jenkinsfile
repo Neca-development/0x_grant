@@ -8,6 +8,8 @@ pipeline {
     SLACK_CHANNEL = 'C03HKNFUWDS'
     PRODUCTION_URL = 'https://nft2nft.win/'
     REMOTE_SSH_PROFILE = 'hackathon'
+    CF_API_EMAIL = credentials('cloudflare-email')
+    CF_DNS_API_TOKEN = credentials('cloudflare-api-key')
   }
 
   stages {
@@ -67,9 +69,13 @@ pipeline {
 
           steps {
             sh '''
-              echo REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE} >> .production.env
-              echo GIT_REPO_NAME=${GIT_REPO_NAME} >> .production.env
-              echo BRANCH_NAME=${BRANCH_NAME} >> .production.env
+              cat >> .production.env << EOF
+              REGISTRY_HOST_REMOTE=${REGISTRY_HOST_REMOTE}
+              GIT_REPO_NAME=${GIT_REPO_NAME}
+              BRANCH_NAME=${BRANCH_NAME}
+              CF_API_EMAIL=${CF_API_EMAIL}
+              CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+              EOF
 
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE bash -c "'
                 mkdir -p frontend
@@ -82,7 +88,6 @@ pipeline {
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $REMOTE_SSH_PROFILE \
                 bash -c "'
                   cd frontend
-                  docker login ${REGISTRY_HOST_REMOTE}
                   docker-compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .production.env pull
                   docker-compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .production.env up -d
                   docker image prune
