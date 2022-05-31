@@ -40,7 +40,7 @@ function CreateOrder() {
 			collection: tokenForSwap?.contractAddress,
 			tokenId: tokenForSwap?.tokenId,
 		};
-		send(offerItem, considCollection);
+		send(offerItem, considCollection, { gasLimit: 50000 });
 	}
 
 	return (
