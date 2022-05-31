@@ -5,7 +5,7 @@ pipeline {
     REGISTRY_HOST = credentials('docker-registry-host')
     REGISTRY_HOST_REMOTE = credentials('docker-registry-domain')
     JENKINS_SERVER = credentials('jenkins-server')
-    SLACK_CHANNEL = 'C03CPSJ1EJH'
+    SLACK_CHANNEL = 'C03HKNFUWDS'
     PRODUCTION_URL = 'https://nft2nft.win/'
     REMOTE_SSH_PROFILE = 'hackathon'
     LOKI_PASSWORD =  credentials('loki-password')
