@@ -1,5 +1,4 @@
 import NftCard from "../components/NftCard";
-import { useBuyUNIC, useBuyUNIS } from "../hooks/useMint";
 import { IToken } from "../models/interfaces";
 
 function FreeNft() {
@@ -20,10 +19,9 @@ function FreeNft() {
     },
   ];
 
-
   return (
     <div className="container mx-auto pt-12 bg-white">
-      <h1 className="text-center mb-20 font-semibold text-6xl w-3/4 mx-auto leading-snug">
+      <h1 className="text-center mb-14 font-semibold text-6xl w-3/4 mx-auto leading-snug">
         Get free NFT
       </h1>
       <div className="flex justify-around">
@@ -33,7 +31,7 @@ function FreeNft() {
             data={token}
           ></NftCard>
         ))}
-    </div>
+      </div>
     </div>
   );
 }
