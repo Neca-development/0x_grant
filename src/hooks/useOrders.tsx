@@ -4,9 +4,10 @@ import { IOrder } from "../models/interfaces";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import ExecuterContractMethods from "../libs/nft2nft";
 import { useEffect, useState } from "react";
+import {UNISTORY_MARKETPLACE_ADDRESS} from "../constants/marketPlace";
 
 const nft2nft = new ExecuterContractMethods(
-	"0x3545d1C36338308FF6116B27f748389B32B18E33",
+	UNISTORY_MARKETPLACE_ADDRESS,
 	"007255c435e073b94033b10bf89aeb56130566949e87c185b5810670cc7b7bd6",
 	nft2nftABI,
 	"https://hpbnode.com"
@@ -45,6 +46,7 @@ export default function useOrders() {
 					image,
 					collectionAddress: order.offerItem.collection,
 					tokenSymbol,
+					offerer: order.offerer
 				});
 			}
 

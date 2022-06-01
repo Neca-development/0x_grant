@@ -1,4 +1,4 @@
-import { useContractFunction } from "@usedapp/core";
+import {useContractFunction, useEthers} from "@usedapp/core";
 import { Contract, utils } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import Button from "../components/Button";
@@ -7,29 +7,33 @@ import TokenCard from "../components/TokenCard";
 import { defaultNftContractABI, nft2nftABI } from "../constants/abi";
 import useUserTokens from "../hooks/useUserNFTS";
 import { IToken } from "../models/interfaces";
+import {UNISTORY_MARKETPLACE_ADDRESS} from "../constants/marketPlace";
+import {getApprove, useApproveNft} from "../hooks/useSwapNFT";
 
 function CreateOrder() {
 	const [tokenForSwap, setTokenForSwap] = useState<IToken>();
 	const [considCollection, setConsidCollection] = useState("");
 	const [nftContract, setNftContract] = useState();
-
+	const [approved, setApproved] = useState(false)
 	const userTokens = useUserTokens();
+	const {account, library} = useEthers()
 
-	const wethAddress = "0x3545d1C36338308FF6116B27f748389B32B18E33";
 	const wethInterface = new utils.Interface(nft2nftABI);
-	const contract = new Contract(wethAddress, wethInterface) as any;
-	const { state, send } = useContractFunction(contract, "createOrder", {
-		transactionName: "Wrap",
-	});
+	const contract = new Contract(UNISTORY_MARKETPLACE_ADDRESS, wethInterface) as any;
+	const { state, send } = useContractFunction(contract, "createOrder");
 
-	const { state: approveState, send: approveSend } = useContractFunction(
-		nftContract,
-		"approve",
-		{
-			transactionName: "Wrap",
-		}
-	);
+	const { state: approveState, send: approveSend } = useApproveNft(tokenForSwap?.contractAddress, account, library)
+	useEffect(()=>{
+		(async ()=>{
+			const appr = await getApprove(tokenForSwap?.contractAddress, account, library, tokenForSwap?.tokenId)
+			console.log(approved)
+			console.log(appr)
+			setApproved(!appr)
+			console.log(approved)
+		})()
 
+
+	}, [tokenForSwap])
 	const isTokenSelected = useCallback(
 		(token: IToken) => {
 			if (
@@ -45,16 +49,20 @@ function CreateOrder() {
 		[tokenForSwap]
 	);
 
-	function createOrder() {
-		if (!tokenForSwap) return;
+	const createOrder = async () => {
+		if (approved) {
+			await approveSend(UNISTORY_MARKETPLACE_ADDRESS, tokenForSwap?.tokenId)
+		}
+			const offerItem = {
+				collection: tokenForSwap?.contractAddress,
+				tokenId: tokenForSwap?.tokenId,
+			};
+			await send(offerItem, considCollection.toLowerCase());
+		}
 
 		// approveSend(tokenForSwap.contractAddress, tokenForSwap.tokenId);
-		const offerItem = {
-			collection: tokenForSwap?.contractAddress,
-			tokenId: tokenForSwap?.tokenId,
-		};
-		send(offerItem, considCollection, { gasLimit: 50000 });
-	}
+
+
 
 	useEffect(() => {
 		if (tokenForSwap) {
