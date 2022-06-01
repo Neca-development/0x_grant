@@ -7,20 +7,18 @@ export interface ITokenCardProps {
   data: IToken;
   onClick?(): void;
   externalClasses?: string[];
-
 }
 
 const NftCard: FunctionComponent<ITokenCardProps> = (props) => {
   const { data, onClick, externalClasses } = props;
 
   const { state: unicState, send: mintUNIC } = useBuyUNIC();
-  const { state: unis, send: mintUNIS} = useBuyUNIS();
+  const { state: unis, send: mintUNIS } = useBuyUNIS();
 
-
-  function mintHandler(){
-    if(data.symbol === 'UNIC'){
-       mintUNIC();
-    }else{
+  function mintHandler() {
+    if (data.symbol === "UNIC") {
+      mintUNIC();
+    } else {
       mintUNIS();
     }
   }
@@ -48,14 +46,17 @@ const NftCard: FunctionComponent<ITokenCardProps> = (props) => {
           {data.collectionName}
         </div>
         <input
-        value={1}
-        disabled={true}
+          value={1}
+          disabled={true}
           className="w-full py-2 text-center font-semibold text-black border-0 border-b-2 border-[rgba(20,20,20,1)] focus:border-0 focus:border-b-2 focus:ring-0 focus:outline-0"
           type="text"
           placeholder="Enter the amount of NFT"
           pattern="^[0-9]+$"
         />
-        <button className="w-fit my-6 py-3 px-8 rounded-lg bg-blue text-white font-semibold" onClick={mintHandler}>
+        <button
+          className="w-fit my-6 py-3 px-8 rounded-lg bg-blue text-white font-semibold"
+          onClick={mintHandler}
+        >
           Mint NFT
         </button>
       </div>

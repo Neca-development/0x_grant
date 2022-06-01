@@ -11,13 +11,6 @@ import MyOrders from "./pages/MyOrders";
 import Swap from "./pages/Swap";
 import reportWebVitals from "./reportWebVitals";
 
-// const config = {
-//   readOnlyChainId: ChainId.Rinkeby,
-//   readOnlyUrls: {
-//     [ChainId.Rinkeby]: getDefaultProvider('https://rinkeby.infura.io/v3/522b462c9a1d45fb9b3b18b5fda51c05'),
-//   },
-// }
-
 export const HPBChainConfig = {
   chainId: 269,
   chainName: "HPBChain",
@@ -40,21 +33,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    {/*     <MoralisProvider serverUrl="https://o77yntlxamoh.usemoralis.com:2053/server" appId="esMmHYJgsWYTb8xkxL32DiQ7JTh7AkbUGHOovo8t">
-     <DAppProvider config={config}>
-         <BrowserRouter>
-           <Routes>
-             <Route path="/" element={<App />}>
-               <Route index element={<Home />}></Route>
-               <Route path="swap" element={<Swap />}></Route>
-               <Route path="create-order" element={<CreateOrder />}></Route>
-               <Route path="free-nft" element={<FreeNft />}></Route>
-             </Route>
-           </Routes>
-         </BrowserRouter>
-       </DAppProvider>
-     </MoralisProvider> */}
-
     <DAppProvider config={HPBChainConfig}>
       <BrowserRouter>
         <Routes>
@@ -63,7 +41,7 @@ root.render(
             <Route path="swap" element={<Swap />}></Route>
             <Route path="create-order" element={<CreateOrder />}></Route>
             <Route path="my-orders" element={<MyOrders />}></Route>
-            <Route path="free-nft" element={<FreeNft />}></Route>
+            <Route path="nft" element={<FreeNft />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
