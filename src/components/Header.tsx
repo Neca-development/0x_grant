@@ -33,7 +33,7 @@ function Header() {
             <Link to="/my-orders">
               <Button text={"My orders"}></Button>
             </Link>
-            <Link to="/nft">
+            <Link to="/free-nft">
               <Button
                 text={"Get free NFTs"}
                 externalClasses={["bg-white text-blue"]}

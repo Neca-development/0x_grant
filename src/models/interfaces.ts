@@ -4,6 +4,7 @@ export interface IOrder {
 	image: string;
 	tokenSymbol: string;
 	collectionAddress: string;
+	offerer: string
 }
 
 export interface IToken {

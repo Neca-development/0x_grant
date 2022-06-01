@@ -5,11 +5,13 @@ import OrderCard from "../components/OrderCard";
 import searchIcon from "../assets/icons/search.svg";
 import useOrders from "../hooks/useOrders";
 import Spinner from "../components/Spinner";
+import {useEthers} from "@usedapp/core";
 
 function Home() {
 	let navigate = useNavigate();
+	const {account} = useEthers()
 	const [search, setSearch] = useState("");
-	const orders = useOrders();
+	const orders = useOrders()?.filter(order=>order.offerer.toLowerCase()!==account?.toLowerCase());
 
 	const filteredOrders = useMemo(() => {
 		if (search.trim() === "") return orders;
