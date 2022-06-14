@@ -14,6 +14,7 @@ const Button: FunctionComponent<IButton> = (props) => {
 			disabled={disabled}
 			onClick={onClick}
 			className={`bg-zinc-700 text-white py-3 px-4 rounded-lg font-semibold ${externalClasses}`}
+      id={`${text.toLowerCase().replace(' ', '-')}-button`}
 		>
 			{text}
 		</button>

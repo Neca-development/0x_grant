@@ -53,7 +53,7 @@ const OrderCard: FunctionComponent<ITokenCardProps> = (props) => {
 				<div className="text-dark-gray font-medium mb-4">
 					Swap to: <span className="font-semibold">{data.tokenSymbol}</span>
 				</div>
-				<button className="text-blue font-bold">Offer overview</button>
+				<button className="text-blue font-bold" id="offer-overview-button">Offer overview</button>
 			</div>
 		</article>
 	);

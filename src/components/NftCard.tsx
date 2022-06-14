@@ -56,6 +56,7 @@ const NftCard: FunctionComponent<ITokenCardProps> = (props) => {
         <button
           className="w-fit my-6 py-3 px-8 rounded-lg bg-blue text-white font-semibold"
           onClick={mintHandler}
+          id="mint-button"
         >
           Mint NFT
         </button>

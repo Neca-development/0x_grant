@@ -51,7 +51,7 @@ const TokenCard: FunctionComponent<ITokenCardProps> = (props) => {
 				<div className="text-dark-gray font-semibold mb-3">
 					{contractAddress}
 				</div>
-				<button className="text-blue font-bold">Pick to swap</button>
+				<button className="text-blue font-bold" id="pick-to-swap-button">Pick to swap</button>
 			</div>
 		</article>
 	);
