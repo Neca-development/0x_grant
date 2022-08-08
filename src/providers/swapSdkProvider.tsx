@@ -37,7 +37,7 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
 
     setSigner(signerFromUsedapp)
     setNftSwap(nftSwapInstance)
-  }, [])
+  }, [library, account])
 
   const swapSdkProviderValue = {
     signer,

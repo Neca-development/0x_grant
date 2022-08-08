@@ -20,7 +20,6 @@ function Home() {
   useEffect(() => {
     activateBrowserWallet()
   }, [])
-
   return (
     <div className="container mx-auto pt-12">
       <h1 className="text-center mt-20 mb-32 font-bold text-6xl w-3/4 mx-auto leading-snug">
@@ -47,7 +46,7 @@ function Home() {
         <Button text="Create order" />
       </div>
 
-      {orders ? (
+      {orders != undefined ? (
         <div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
           {orders?.map((order) => (
             <OrderCard
