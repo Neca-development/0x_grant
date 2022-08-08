@@ -1,0 +1,29 @@
+body {
+	margin: 0;
+	font-family: "Montserrat";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+		monospace;
+}
+
+@media screen and (max-width: 600px) {
+	.container {
+		padding: 0 25px;
+	}
+}
+@media screen and (min-width: 600px) {
+	.container {
+		padding: 0 45px;
+	}
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Open+Sans:wght@400;700&family=Poppins&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
