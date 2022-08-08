@@ -1,3 +1,4 @@
+import type { SearchOrdersParams } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
 import { useEffect } from 'react'
 
@@ -7,8 +8,12 @@ import OrderCard from '../components/OrderCard'
 import Spinner from '../components/Spinner'
 import { useOrders } from '../hooks/useOrders'
 
+const searchOrderParams: Partial<SearchOrdersParams> = {
+  nftToken: '0xB19E269B37c0b195571309746c799D5524c58cAc',
+}
+
 function Home() {
-  const orders = useOrders()
+  const orders = useOrders(searchOrderParams)
   const { activateBrowserWallet } = useEthers()
 
   useEffect(() => {
