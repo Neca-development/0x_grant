@@ -1,27 +1,16 @@
-import { FunctionComponent } from "react";
-import unistoryLogo from "../assets/icons/unistory_logo.svg";
-import { useBuyUNIC, useBuyUNIS } from "../hooks/useMint";
-import { IToken } from "../models/interfaces";
+import type { FunctionComponent } from 'react'
+
+import unistoryLogo from '../assets/icons/unistory_logo.svg'
+import type { IToken } from '../models/interfaces'
 
 export interface ITokenCardProps {
-  data: IToken;
-  onClick?(): void;
-  externalClasses?: string[];
+  data: IToken
+  onClick?(): void
+  externalClasses?: string[]
 }
 
 const NftCard: FunctionComponent<ITokenCardProps> = (props) => {
-  const { data, onClick, externalClasses } = props;
-
-  const { state: unicState, send: mintUNIC } = useBuyUNIC();
-  const { state: unis, send: mintUNIS } = useBuyUNIS();
-
-  function mintHandler() {
-    if (data.symbol === "UNIC") {
-      mintUNIC();
-    } else {
-      mintUNIS();
-    }
-  }
+  const { data, onClick, externalClasses } = props
 
   return (
     <article
@@ -30,7 +19,7 @@ const NftCard: FunctionComponent<ITokenCardProps> = (props) => {
     >
       <div className="aspect-square bg-gray-200 relative flex">
         {data.image ? (
-          <img className="w-[25rem] h-[25rem]" src={data.image} />
+          <img className="w-[25rem] h-[25rem]" src={data.image} alt="" />
         ) : (
           <img
             className="absolute inset-1/2 translate-y-center translate-x-center"
@@ -55,14 +44,13 @@ const NftCard: FunctionComponent<ITokenCardProps> = (props) => {
         />
         <button
           className="w-fit my-6 py-3 px-8 rounded-lg bg-blue text-white font-semibold"
-          onClick={mintHandler}
           id="mint-button"
         >
           Mint NFT
         </button>
       </div>
     </article>
-  );
-};
+  )
+}
 
-export default NftCard;
+export default NftCard

@@ -1,22 +1,11 @@
-import ReactGA from 'react-ga';
-import { Outlet } from 'react-router-dom';
-import { useEffect } from 'react';
+import './App.css'
 
-import './App.css';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import { useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom'
 
+import Footer from './components/Footer'
+import Header from './components/Header'
 
-const TRACKING_ID = 'UA-231929759-1 '; // OUR_TRACKING_ID
-ReactGA.initialize(TRACKING_ID);
 function App() {
-  const location = useLocation();
-
-  useEffect(() => {
-    ReactGA.pageview(location.pathname);
-  }, [location]);
-
   return (
     <div className="">
       <Header></Header>
@@ -32,7 +21,7 @@ function App() {
       <Outlet />
       <Footer></Footer>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

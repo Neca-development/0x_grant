@@ -31,9 +31,6 @@
     "check-types": "tsc --noEmit --pretty",
     "prepare": "husky install"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

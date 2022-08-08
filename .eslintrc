@@ -1,6 +1,6 @@
 {
   // Configuration for JavaScript files
-  "extends": ["react-app", "airbnb-base", "plugin:prettier/recommended"],
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
 
   "rules": {
     "prettier/prettier": [
@@ -117,7 +117,8 @@
         ],
         "eol-last": ["warn", "always"],
         "no-multiple-empty-lines": "warn",
-        "no-unused-vars": "off"
+        "no-unused-vars": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off"
       }
     }
   ]

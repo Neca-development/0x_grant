@@ -1,24 +1,14 @@
-import Button from "./Button";
-import { useEthers } from "@usedapp/core";
+import { useEthers } from '@usedapp/core'
+import { Link } from 'react-router-dom'
+
 // import { useEtherBalance, useEthers } from "@usedapp/core";
 // import { formatEther } from "@ethersproject/units";
-import unistoryLogo from "../assets/icons/unistory_logo_dark.svg";
-import { Link } from "react-router-dom";
+import unistoryLogo from '../assets/icons/unistory_logo_dark.svg'
+import Button from './Button'
 // import { useMemo } from "react";
 
 function Header() {
-  const { activateBrowserWallet, account, chainId } = useEthers();
-  //   const balance = useEtherBalance(account);
-
-  // const walletAddress = useMemo(
-  // 	() =>
-  // 		`${account?.substring(0, 4)}...${account?.substring(
-  // 			account.length - 5,
-  // 			account.length
-  // 		)}`,
-  // 	[account]
-
-  // );
+  const { activateBrowserWallet, account } = useEthers()
 
   return (
     <header className="shadow-[0px_4px_10px_rgba(192,192,192,0.25)]">
@@ -32,25 +22,25 @@ function Header() {
             {/* <span className="font-semibold mr-4">{walletAddress}</span> */}
             {/* <span className="font-semibold mr-4">{balance?.toString()}</span> */}
             <Link to="/my-orders">
-              <Button text={"My orders"}></Button>
+              <Button text={'My orders'}></Button>
             </Link>
             <Link to="/free-nft">
               <Button
-                text={"Get free NFTs"}
-                externalClasses={["bg-white text-blue"]}
+                text={'Get free NFTs'}
+                externalClasses={['bg-white text-blue']}
               ></Button>
             </Link>
           </div>
         ) : (
           <Button
             onClick={() => activateBrowserWallet()}
-            text={"Connect wallet"}
-            externalClasses={["bg-zinc-700"]}
+            text={'Connect wallet'}
+            externalClasses={['bg-zinc-700']}
           ></Button>
         )}
       </div>
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header

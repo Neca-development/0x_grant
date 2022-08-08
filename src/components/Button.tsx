@@ -1,23 +1,20 @@
-import { FunctionComponent, MouseEvent } from 'react';
-import useAnalyticsEventTracker from '../hooks/useAnalyticsEventTracker';
+import type { FunctionComponent } from 'react'
 
 export interface IButton {
-  text: string;
-  onClick?: () => void;
-  disabled?: boolean;
-  externalClasses?: string[];
+  text: string
+  onClick?: () => void
+  disabled?: boolean
+  externalClasses?: string[]
 }
 
 const Button: FunctionComponent<IButton> = (props) => {
-  const { text, onClick, externalClasses, disabled } = props;
-  const gaEventTracker = useAnalyticsEventTracker('click');
+  const { text, onClick, externalClasses, disabled } = props
 
   const handleClick = () => {
-    gaEventTracker(text.toLowerCase().replace(' ', '-'));
     if (onClick) {
-      onClick();
+      onClick()
     }
-  };
+  }
 
   return (
     <button
@@ -27,7 +24,7 @@ const Button: FunctionComponent<IButton> = (props) => {
     >
       {text}
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button
