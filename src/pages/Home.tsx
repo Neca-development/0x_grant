@@ -6,10 +6,11 @@ import searchIcon from '../assets/icons/search.svg'
 import Button from '../components/Button'
 import OrderCard from '../components/OrderCard'
 import Spinner from '../components/Spinner'
+import { NFT_COLLECTION } from '../constants/collection'
 import { useOrders } from '../hooks/useOrders'
 
 const searchOrderParams: Partial<SearchOrdersParams> = {
-  nftToken: '0xB19E269B37c0b195571309746c799D5524c58cAc',
+  nftToken: NFT_COLLECTION,
 }
 
 function Home() {
