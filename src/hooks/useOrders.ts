@@ -1,7 +1,7 @@
-import { SwapSdkContext } from '@providers/swapSdkProvider'
 import { useContext, useEffect, useState } from 'react'
 
 import type { IOrder } from '../models/interfaces'
+import { SwapSdkContext } from '../providers/swapSdkProvider'
 import { getOrderMetadata } from '../utils/getOrderMetadata'
 
 export function useOrders() {
