@@ -1,27 +1,21 @@
-import { NftSwapV4 } from '@traderxyz/nft-swap-sdk'
-import { useEthers } from '@usedapp/core'
-import { useEffect, useState } from 'react'
-import { getOrderMetadata } from 'utils/getOrderMetadata'
+import { SwapSdkContext } from '@providers/swapSdkProvider'
+import { useContext, useEffect, useState } from 'react'
 
 import type { IOrder } from '../models/interfaces'
-
-const NETWORK_CHAIN_ID = 4
+import { getOrderMetadata } from '../utils/getOrderMetadata'
 
 export function useOrders() {
-  const { library, account } = useEthers()
+  const { signer, nftSwap } = useContext(SwapSdkContext)
 
   const [orders, setOrders] = useState<IOrder[]>()
 
   useEffect(() => {
-    if (!library) return
-    if (!account) return
-
-    const signer = library.getSigner()
-    const swapSdk = new NftSwapV4(library, signer, NETWORK_CHAIN_ID)
-
     async function fetchOrders() {
+      if (!signer) return
+      if (!nftSwap) return
+
       try {
-        const fetchedOrdersData = await swapSdk.getOrders({
+        const fetchedOrdersData = await nftSwap.getOrders({
           status: 'open',
         })
 
@@ -37,9 +31,8 @@ export function useOrders() {
         setOrders(undefined)
       }
     }
-
     fetchOrders()
-  }, [library, account])
+  }, [signer, nftSwap])
 
   return orders
 }

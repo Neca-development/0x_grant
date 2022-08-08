@@ -2,9 +2,10 @@
 
 import type { JsonRpcSigner } from '@ethersproject/providers'
 import type { PostOrderResponsePayload } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
-import { defaultNftContractABI } from 'constants/abi'
 import { Contract, utils } from 'ethers'
-import type { IOrder } from 'models/interfaces'
+
+import { defaultNftContractABI } from '../constants/abi'
+import type { IOrder } from '../models/interfaces'
 
 export async function getOrderMetadata(
   signer: JsonRpcSigner,
