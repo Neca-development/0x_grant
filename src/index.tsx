@@ -9,10 +9,21 @@ import FreeNft from './pages/FreeNft'
 import Home from './pages/Home'
 import MyOrders from './pages/MyOrders'
 import Swap from './pages/Swap'
+import { Config, DAppProvider, Rinkeby } from '@usedapp/core'
+import { getDefaultProvider } from 'ethers'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
+const config: Config = {
+  readOnlyChainId: Rinkeby.chainId,
+  readOnlyUrls: {
+    [Rinkeby.chainId]: getDefaultProvider('rinkeby'),
+  },
+}
+
+
 root.render(
+  <DAppProvider config={config}>
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
@@ -24,4 +35,5 @@ root.render(
       </Route>
     </Routes>
   </BrowserRouter>
+  </DAppProvider>
 )

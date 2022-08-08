@@ -1,9 +1,12 @@
+
+import { useNavigate } from 'react-router-dom'
 import searchIcon from '../assets/icons/search.svg'
 import Button from '../components/Button'
 // import OrderCard from '../components/OrderCard'
 // import Spinner from '../components/Spinner'
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div className="container mx-auto pt-12">
       <h1 className="text-center mt-20 mb-32 font-bold text-6xl w-3/4 mx-auto leading-snug">
@@ -26,7 +29,7 @@ function Home() {
             placeholder="Search by smart-contract adress"
           />
         </div>
-        <Button text="Create order"></Button>
+        <Button onClick={()=>navigate('create-order')} text="Create order"></Button>
       </div>
       {/* {!filteredOrders && (
         <div className="my-20">
