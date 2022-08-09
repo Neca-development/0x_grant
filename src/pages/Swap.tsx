@@ -1,13 +1,13 @@
-import type { UserFacingERC20AssetDataSerializedV4 } from '@traderxyz/nft-swap-sdk'
 import type { PostOrderResponsePayload } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import swap from '../assets/icons/swap.svg'
 import unistoryLogo from '../assets/icons/unistory_logo.svg'
+import { useCollectionOrders } from '../hooks/useCollectionOrders'
+import { useFulfillOrder } from '../hooks/useFulfillOrder'
 import type { IOrder } from '../models/interfaces'
-import { SwapSdkContext } from '../providers/swapSdkProvider'
 
 interface IOrderOverview {
   order: IOrder
@@ -60,49 +60,21 @@ const Swap = () => {
     offerer: state.offerer,
   }
 
-  const { nftSwap } = useContext(SwapSdkContext)
   const { account } = useEthers()
 
+  const [orders] = useCollectionOrders(state.collectionAddress, state.id)
   const [selectedOrder, setSelectedOrder] = useState<PostOrderResponsePayload>()
 
   useEffect(() => {
-    async function fetchSelectedOrder() {
-      if (!nftSwap) return
+    if (!orders) return
 
-      try {
-        const order = await nftSwap.getOrders({
-          nftToken: state.collectionAddress,
-          nftTokenId: String(state.id),
-        })
-        setSelectedOrder(order.orders[0])
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchSelectedOrder()
-  }, [nftSwap])
+    const firstOrder = orders[0]
+    if (!firstOrder) return
 
-  const fulfillOrder = async () => {
-    if (!nftSwap) return
-    if (!selectedOrder) return
-    if (!account) return
+    setSelectedOrder(firstOrder)
+  }, [orders])
 
-    const takerAsset: UserFacingERC20AssetDataSerializedV4 = {
-      tokenAddress: selectedOrder.erc20Token,
-      amount: selectedOrder.erc20TokenAmount,
-      type: 'ERC20',
-    }
-
-    const approvalStatus = await nftSwap.loadApprovalStatus(takerAsset, account)
-
-    if (!approvalStatus.contractApproved) {
-      const approvalTx = await nftSwap.approveTokenOrNftByAsset(takerAsset, account)
-      await approvalTx.wait()
-    }
-
-    const fillTx = await nftSwap.fillSignedOrder(selectedOrder.order)
-    await fillTx.wait()
-  }
+  const fulfillOrder = useFulfillOrder(selectedOrder, account)
 
   return (
     <div className="container mx-auto pt-12">
