@@ -20,6 +20,7 @@ export async function getOrderMetadata(
   const tokenSymbol = await contract.symbol()
   const image = ''
   const offerer = order.order.maker
+  const { nonce } = order.order
 
-  return { id, collectionName, image, collectionAddress, tokenSymbol, offerer }
+  return { id, collectionName, image, collectionAddress, tokenSymbol, offerer, nonce }
 }

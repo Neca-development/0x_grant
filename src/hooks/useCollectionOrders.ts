@@ -3,10 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 
 import { SwapSdkContext } from '../providers/swapSdkProvider'
 
-export function useCollectionOrders(
-  collectionAddress: string,
-  tokenId?: number | string
-) {
+export function useCollectionOrders(collectionAddress: string, nonce?: string) {
   const { signer, nftSwap } = useContext(SwapSdkContext)
 
   const [orders, setOrders] = useState<PostOrderResponsePayload[]>()
@@ -18,7 +15,7 @@ export function useCollectionOrders(
     try {
       const fetchedOrdersData = await nftSwap.getOrders({
         nftToken: collectionAddress,
-        nftTokenId: String(tokenId),
+        nonce,
       })
       const fetchedOrders = fetchedOrdersData.orders
       setOrders(fetchedOrders)

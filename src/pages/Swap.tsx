@@ -58,11 +58,12 @@ const Swap = () => {
     collectionName: state.collectionName,
     tokenSymbol: state.tokenSymbol,
     offerer: state.offerer,
+    nonce: state.nonce,
   }
 
   const { account } = useEthers()
 
-  const [orders] = useCollectionOrders(state.collectionAddress, state.id)
+  const [orders] = useCollectionOrders(state.collectionAddress, state.nonce)
   const [selectedOrder, setSelectedOrder] = useState<PostOrderResponsePayload>()
 
   useEffect(() => {
