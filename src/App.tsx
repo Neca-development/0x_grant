@@ -7,20 +7,11 @@ import Header from './components/Header'
 
 function App() {
   return (
-    <div className="">
-      <Header></Header>
-      {/* <nav
-        style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem",
-        }}
-      >
-        <Link to="/invoices">Invoices</Link> |{" "}
-        <Link to="/expenses">Expenses</Link>
-      </nav> */}
+    <>
+      <Header />
       <Outlet />
-      <Footer></Footer>
-    </div>
+      <Footer />
+    </>
   )
 }
 

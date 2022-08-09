@@ -1,0 +1,1 @@
+export const NFT_COLLECTION = '0xab09b7515ea05a5c7cc629e410e2799706e59b54'
