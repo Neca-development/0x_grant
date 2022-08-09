@@ -1,11 +1,14 @@
-import type { PostOrderResponsePayload } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
+import type {
+  PostOrderResponsePayload,
+  SearchOrdersParams,
+} from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import swap from '../assets/icons/swap.svg'
 import unistoryLogo from '../assets/icons/unistory_logo.svg'
-import { useCollectionOrders } from '../hooks/useCollectionOrders'
+import { useOrders } from '../hooks/useOrders'
 import { useFulfillOrder } from '../hooks/useFulfillOrder'
 import type { IOrder } from '../models/interfaces'
 
@@ -63,7 +66,11 @@ const Swap = () => {
 
   const { account } = useEthers()
 
-  const [orders] = useCollectionOrders(state.collectionAddress, state.nonce)
+  const searchParams: Partial<SearchOrdersParams> = {
+    nonce: state.nonce,
+  }
+
+  const [orders] = useOrders(searchParams)
   const [selectedOrder, setSelectedOrder] = useState<PostOrderResponsePayload>()
 
   useEffect(() => {

@@ -3,12 +3,22 @@ import { useContext } from 'react'
 
 import { SwapSdkContext } from '../providers/swapSdkProvider'
 
-const CHAIN_ID = 3
-
+/**
+ * Get the order creation function for the passed configuration
+ * @param makerAsset an asset (ERC20, ERC721, or ERC1155) the user has
+ * @param takerAsset an asset (ERC20, ERC721, or ERC1155) the user wants
+ * @param makerAddress wallet address of user who creates the order
+ * @param chainId id of the chain in which the transaction will be performed
+ * @param metadata an optional record object that will be stored with the order in the orderbook
+ * @param fees optional array that contents config for fee and royalties
+ * @returns function to create an order and post it in the orderbook
+ */
 export function useCreateOrder(
   makerAsset: SwappableAssetV4,
   takerAsset: SwappableAssetV4,
   makerAddress: string | undefined,
+  chainId: number | string,
+  metadata?: Record<string, string>,
   fees?: Fee[]
 ) {
   const { nftSwap } = useContext(SwapSdkContext)
@@ -52,7 +62,7 @@ export function useCreateOrder(
 
     if (!signedOrder) return
 
-    await nftSwap.postOrder(signedOrder, CHAIN_ID)
+    await nftSwap.postOrder(signedOrder, chainId, metadata)
     return signedOrder
   }
 

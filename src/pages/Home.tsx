@@ -8,14 +8,14 @@ import Button from '../components/Button'
 import OrderCard from '../components/OrderCard'
 import Spinner from '../components/Spinner'
 import { NFT_COLLECTION } from '../constants/collection'
-import { useOrders } from '../hooks/useOrders'
+import { useParsedOrders } from '../hooks/useParsedOrders'
 
 const searchOrderParams: Partial<SearchOrdersParams> = {
   nftToken: NFT_COLLECTION,
 }
 
 function Home() {
-  const orders = useOrders(searchOrderParams)
+  const orders = useParsedOrders(searchOrderParams)
   const navigate = useNavigate()
   const { activateBrowserWallet } = useEthers()
 

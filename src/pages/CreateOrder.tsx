@@ -11,6 +11,8 @@ const INITIAL_FORM_STATE = {
   takerTokenAmount: '',
 }
 
+const CHAIN_ID = 3
+
 function CreateOrder() {
   const { account } = useEthers()
 
@@ -33,7 +35,7 @@ function CreateOrder() {
     type: 'ERC20',
   }
 
-  const createOrder = useCreateOrder(makerAsset, takerAsset, account)
+  const createOrder = useCreateOrder(makerAsset, takerAsset, account, CHAIN_ID)
 
   return (
     <div className="container mx-auto pt-12">
