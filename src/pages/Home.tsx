@@ -1,3 +1,4 @@
+
 import type { SearchOrdersParams } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
 import { useEffect } from 'react'
@@ -46,7 +47,7 @@ function Home() {
             placeholder="Search by smart-contract address"
           />
         </div>
-        <Button text="Create order" />
+        <Button onClick={()=>navigate('create-order')} text="Create order"></Button>
       </div>
 
       {orders != undefined ? (

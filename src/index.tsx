@@ -12,16 +12,20 @@ import FreeNft from './pages/FreeNft'
 import Home from './pages/Home'
 import MyOrders from './pages/MyOrders'
 import Swap from './pages/Swap'
+
+import { Config, DAppProvider, Ropsten } from '@usedapp/core'
+import { getDefaultProvider } from 'ethers'
+
 import { SwapSdkProvider } from './providers/swapSdkProvider'
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 const config: Config = {
-  readOnlyChainId: Mainnet.chainId,
+  readOnlyChainId: Ropsten.chainId,
   readOnlyUrls: {
-    [Mainnet.chainId]: getDefaultProvider('mainnet'),
+    [Ropsten.chainId]: getDefaultProvider("ropsten"),
   },
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <DAppProvider config={config}>
