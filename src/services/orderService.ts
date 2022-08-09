@@ -13,7 +13,7 @@ export async function createNftToNftOrder(
 
     console.log('startCreation');
     
-const CHAIN_ID = 4; // Chain 1 corresponds to Mainnet. Visit https://chainid.network/ for a complete list of chain ids
+const CHAIN_ID = 3; // Chain 1 corresponds to Mainnet. Visit https://chainid.network/ for a complete list of chain ids
 
 const UNISTORY_1:SwappableAsset = {
   tokenAddress: swapOutNft.tokenAddress, // CryptoPunk contract address
@@ -85,7 +85,7 @@ console.log('orderBuit');
             'Content-Type': 'application/json',
             'mode':'no-cors'
         }),
-        body:JSON.stringify({chainId:4, order:signedOrder}),
+        body:JSON.stringify({chainId:3, order:signedOrder}),
         credentials:"omit"
         
 })
@@ -109,18 +109,18 @@ export async function createNftToERCOrder(
 
    console.log('startCreation');
    
-const CHAIN_ID = 4; // Chain 1 corresponds to Mainnet. Visit https://chainid.network/ for a complete list of chain ids
+const CHAIN_ID = 3; // Chain 1 corresponds to Mainnet. Visit https://chainid.network/ for a complete list of chain ids
 
 const UNISTORY_1:SwappableAsset = {
- tokenAddress: "0xa2Ef81DE73Ee4a11a5Ff0C89A9c1C66d88EEe4AE", // CryptoPunk contract address
- tokenId: "1", // Token Id of the CryptoPunk we want to swap
- type: "ERC721" // Must be one of 'ERC20', 'ERC721', or 'ERC1155'
+ tokenAddress: swapOutNft.tokenAddress, // CryptoPunk contract address
+ tokenId: swapOutNft.tokenId, // Token Id of the CryptoPunk we want to swap
+ type: swapOutNft.type // Must be one of 'ERC20', 'ERC721', or 'ERC1155'
 };
 
 const TEN_USDC:UserFacingERC20AssetDataSerialized = {
- tokenAddress: "0xd92e713d051c37ebb2561803a3b5fbabc4962431", // BAYC contract address
- amount:"100",
- type: "ERC20",
+ tokenAddress: swapInERC20.tokenAddress, // BAYC contract address
+ amount:swapInERC20.amount,
+ type: swapInERC20.type,   
 };
 
 // User A Trade Data
@@ -173,13 +173,11 @@ console.log('orderBuit', order);
   // Part 1 Complete. User A is now done. Now we send the `signedOrder` to User B to complete the trade.
   console.log('order signed', signedOrder);
   
-  await nftSwapSdk.postOrder(signedOrder, '4');
+  const res = await nftSwapSdk.postOrder(signedOrder, '3');
   
   console.log('====================================');
-  console.log('POSTED');
+  console.log('POSTED', res);
   console.log('====================================');
-
-  
 
    }
 

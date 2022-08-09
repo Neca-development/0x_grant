@@ -9,15 +9,15 @@ import FreeNft from './pages/FreeNft'
 import Home from './pages/Home'
 import MyOrders from './pages/MyOrders'
 import Swap from './pages/Swap'
-import { Config, DAppProvider, Rinkeby } from '@usedapp/core'
+import { Config, DAppProvider, Ropsten } from '@usedapp/core'
 import { getDefaultProvider } from 'ethers'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 const config: Config = {
-  readOnlyChainId: Rinkeby.chainId,
+  readOnlyChainId: Ropsten.chainId,
   readOnlyUrls: {
-    [Rinkeby.chainId]: getDefaultProvider('rinkeby'),
+    [Ropsten.chainId]: getDefaultProvider("ropsten"),
   },
 }
 
