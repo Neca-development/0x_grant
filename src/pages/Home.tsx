@@ -1,4 +1,3 @@
-
 import type { SearchOrdersParams } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
 import { useEffect } from 'react'
@@ -47,14 +46,14 @@ function Home() {
             placeholder="Search by smart-contract address"
           />
         </div>
-        <Button onClick={()=>navigate('create-order')} text="Create order"></Button>
+        <Button onClick={() => navigate('create-order')} text="Create order"></Button>
       </div>
 
       {orders != undefined ? (
         <div className="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 xl gap-4 mt-10">
           {orders?.map((order) => (
             <OrderCard
-              key={`${order.id}${order.collectionAddress}`}
+              key={order.nonce}
               data={order}
               onClick={() => navigate('/swap', { state: order })}
             />
