@@ -1,6 +1,7 @@
 import type { SearchOrdersParams } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import searchIcon from '../assets/icons/search.svg'
 import Button from '../components/Button'
@@ -15,11 +16,13 @@ const searchOrderParams: Partial<SearchOrdersParams> = {
 
 function Home() {
   const orders = useOrders(searchOrderParams)
+  const navigate = useNavigate()
   const { activateBrowserWallet } = useEthers()
 
   useEffect(() => {
     activateBrowserWallet()
   }, [])
+
   return (
     <div className="container mx-auto pt-12">
       <h1 className="text-center mt-20 mb-32 font-bold text-6xl w-3/4 mx-auto leading-snug">
@@ -52,7 +55,7 @@ function Home() {
             <OrderCard
               key={`${order.id}${order.collectionAddress}`}
               data={order}
-              // onClick={() => navigate('/swap', { state: order })}
+              onClick={() => navigate('/swap', { state: order })}
             />
           ))}
         </div>

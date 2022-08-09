@@ -18,6 +18,7 @@ export function useOrders(searchParams?: Partial<SearchOrdersParams>) {
       try {
         const fetchedOrdersData = await nftSwap.getOrders(searchParams)
         const fetchedOrders = fetchedOrdersData.orders
+        console.log(fetchedOrders)
 
         const ordersMetadataPromises = fetchedOrders.map((order) =>
           getOrderMetadata(signer, order)
