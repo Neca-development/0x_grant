@@ -23,6 +23,7 @@ const config: Config = {
     [Ropsten.chainId]: getDefaultProvider('ropsten'),
   },
 }
+
 root.render(
   <DAppProvider config={config}>
     <SwapSdkProvider>
