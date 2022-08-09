@@ -5,4 +5,3 @@ declarations.d.ts
 template
 prepublish.js
 node_modules/
-./src
