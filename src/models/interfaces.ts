@@ -5,6 +5,7 @@ export interface IOrder {
   tokenSymbol: string
   collectionAddress: string
   offerer: string
+  nonce: string
 }
 
 export interface IToken {
