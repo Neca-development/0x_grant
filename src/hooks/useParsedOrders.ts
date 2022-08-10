@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import type { IOrder } from '../models/interfaces'
 import { SwapSdkContext } from '../providers/swapSdkProvider'
 import { getOrderMetadata } from '../utils/getOrderMetadata'
-import { useOrders } from './useOrders'
+import { useOrders } from '../sdk-hooks/useOrders'
 
 export function useParsedOrders(searchParams?: Partial<SearchOrdersParams>) {
   const { signer } = useContext(SwapSdkContext)

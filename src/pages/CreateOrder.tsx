@@ -1,8 +1,8 @@
 import type { SwappableAssetV4 } from '@traderxyz/nft-swap-sdk'
 import { useEthers } from '@usedapp/core'
 import { useState } from 'react'
-import { useQuickSwap } from '../hooks/useQuickSwap'
-import { useCreateOrder } from '../hooks/useCreateOrder'
+import { useCreateOrder } from '../sdk-hooks/useCreateOrder'
+import { useQuickSwap } from '../sdk-hooks/useQuickSwap'
 import Button from '../components/Button'
 
 const INITIAL_FORM_STATE = {

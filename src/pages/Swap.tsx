@@ -5,11 +5,10 @@ import type {
 import { useEthers } from '@usedapp/core'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-
+import { useFulfillOrder } from '../sdk-hooks/useFulfillOrder'
+import { useOrders } from '../sdk-hooks/useOrders'
 import swap from '../assets/icons/swap.svg'
 import unistoryLogo from '../assets/icons/unistory_logo.svg'
-import { useOrders } from '../hooks/useOrders'
-import { useFulfillOrder } from '../hooks/useFulfillOrder'
 import type { IOrder } from '../models/interfaces'
 
 interface IOrderOverview {
