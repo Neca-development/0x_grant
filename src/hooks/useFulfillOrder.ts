@@ -1,3 +1,4 @@
+import { ContractReceipt } from 'ethers'
 import type {
   ApprovalOverrides,
   FillOrderOverrides,
@@ -32,7 +33,7 @@ export function useFulfillOrder(
 ) {
   const { nftSwap } = useContext(SwapSdkContext)
 
-  const fulfillOrder = async () => {
+  const fulfillOrder = async (): Promise<ContractReceipt | undefined> => {
     if (!nftSwap) return
     if (!order) return
     if (!takerAddress) return
