@@ -1,7 +1,5 @@
 # NFT2NFT
 
-----
-
 ## About
 
 This project has been built as a “training platform” for React hook library wrapper around NFT Swap SDK.
