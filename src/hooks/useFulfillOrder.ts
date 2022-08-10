@@ -14,26 +14,29 @@ import { useContext } from 'react'
 import { SwapSdkContext } from '../providers/swapSdkProvider'
 
 /**
- * Get the order fulfillment function for the passed configuration
- * @param order order to fulfill
- * @param takerAddress buyer wallet address
- * @param approvalOverrides optional config for approval status load
- * @param approvalTransactionOverrides optional config for transaction approve
- * @param fillOrderOverrides optional config for order fulfillment
- * @param transactionOverrides optional config for swap transaction
- * @returns function to fulfill the order
+ * Get the order fulfillment function
  */
-export function useFulfillOrder(
-  order: PostOrderResponsePayload | undefined,
-  takerAddress: string | undefined,
-  approvalOverrides?: Partial<ApprovalOverrides>,
-  approvalTransactionOverrides?: Partial<TransactionOverrides>,
-  fillOrderOverrides?: Partial<FillOrderOverrides>,
-  transactionOverrides?: Partial<PayableOverrides>
-) {
+export function useFulfillOrder() {
   const { nftSwap } = useContext(SwapSdkContext)
 
-  const fulfillOrder = async (): Promise<ContractReceipt | undefined> => {
+  /**
+   * Fulfills signed order
+   * @param order order to fulfill
+   * @param takerAddress buyer wallet address
+   * @param approvalOverrides optional config for approval status load
+   * @param approvalTransactionOverrides optional config for transaction approve
+   * @param fillOrderOverrides optional config for order fulfillment
+   * @param transactionOverrides optional config for swap transaction
+   * @returns a transaction receipt if successful
+   */
+  const fulfillOrder = async (
+    order: PostOrderResponsePayload | undefined,
+    takerAddress: string | undefined,
+    approvalOverrides?: Partial<ApprovalOverrides>,
+    approvalTransactionOverrides?: Partial<TransactionOverrides>,
+    fillOrderOverrides?: Partial<FillOrderOverrides>,
+    transactionOverrides?: Partial<PayableOverrides>
+  ): Promise<ContractReceipt | undefined> => {
     if (!nftSwap) return
     if (!order) return
     if (!takerAddress) return

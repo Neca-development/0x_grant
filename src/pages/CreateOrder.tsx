@@ -17,6 +17,9 @@ const CHAIN_ID = 3
 function CreateOrder() {
   const { account } = useEthers()
 
+  const createOrder = useCreateOrder()
+  const quickSwap = useQuickSwap()
+
   const [form, setForm] = useState(INITIAL_FORM_STATE)
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,12 +35,17 @@ function CreateOrder() {
 
   const takerAsset: SwappableAssetV4 = {
     tokenAddress: form.takerTokenAddress,
-    amount: form.takerTokenAmount,
+    amount: String(+form.takerTokenAmount * 10 ** 18),
     type: 'ERC20',
   }
 
-  const createOrder = useCreateOrder(makerAsset, takerAsset, account, CHAIN_ID)
-  const quickSwap = useQuickSwap(takerAsset, makerAsset, account, CHAIN_ID)
+  const handleCreateOrder = async () => {
+    await createOrder(makerAsset, takerAsset, account, CHAIN_ID)
+  }
+
+  const handleQuickSwap = async () => {
+    await quickSwap(takerAsset, makerAsset, account, CHAIN_ID)
+  }
 
   return (
     <div className="container mx-auto pt-12">
@@ -87,14 +95,18 @@ function CreateOrder() {
       <br />
 
       <Button
-        onClick={createOrder}
+        onClick={handleCreateOrder}
         text="Create order"
         externalClasses={['bg-blue mt-12']}
       />
 
       <br />
 
-      <Button onClick={quickSwap} text="Quick swap" externalClasses={['bg-blue mt-12']} />
+      <Button
+        onClick={handleQuickSwap}
+        text="Quick swap"
+        externalClasses={['bg-blue mt-12']}
+      />
     </div>
   )
 }

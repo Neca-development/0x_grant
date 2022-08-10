@@ -66,6 +66,8 @@ const Swap = () => {
 
   const { account } = useEthers()
 
+  const fulfillOrder = useFulfillOrder()
+
   const searchParams: Partial<SearchOrdersParams> = {
     nonce: state.nonce,
   }
@@ -82,7 +84,9 @@ const Swap = () => {
     setSelectedOrder(firstOrder)
   }, [orders])
 
-  const fulfillOrder = useFulfillOrder(selectedOrder, account)
+  const handleFulfillOrder = async () => {
+    await fulfillOrder(selectedOrder, account)
+  }
 
   return (
     <div className="container mx-auto pt-12">
@@ -102,7 +106,7 @@ const Swap = () => {
           {selectedOrder && (
             <button
               className="font-semibold text-white text-md w-5/12 h-[42px] rounded-xl mt-28 bg-[#1275D3]"
-              onClick={fulfillOrder}
+              onClick={handleFulfillOrder}
             >
               Fulfill order
             </button>
