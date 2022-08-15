@@ -1,11 +1,13 @@
-import type {
-  PostOrderResponsePayload,
+import { useContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import {
   SearchOrdersParams,
+  PostOrderResponsePayload,
 } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
 import { useEthers } from '@usedapp/core'
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useFulfillOrder } from '../sdk-hooks/useFulfillOrder'
+import { SwapSdkContext } from '../providers/swapSdkProvider'
+import { NFT_COLLECTION } from '../constants/collection'
 import { useOrders } from '../sdk-hooks/useOrders'
 import swap from '../assets/icons/swap.svg'
 import unistoryLogo from '../assets/icons/unistory_logo.svg'
@@ -18,7 +20,6 @@ interface IOrderOverview {
 const OrderOverview = (props: IOrderOverview) => {
   const { order } = props
   const { id, collectionName, image, collectionAddress } = order
-
   return (
     <div className="flex">
       <div className="aspect-square w-3/5 relative bg-gray-500 mr-6">
@@ -87,6 +88,29 @@ const Swap = () => {
     await fulfillOrder(selectedOrder, account)
   }
 
+  const { nftSwap } = useContext(SwapSdkContext)
+  const [rawOrdersToBuy] = useOrders({
+    nftToken: NFT_COLLECTION,
+  })
+
+  const batchBuyNfts = async () => {
+    if (!nftSwap) return
+    if (!rawOrdersToBuy) return
+
+    if (!rawOrdersToBuy[0]) return
+    if (!rawOrdersToBuy[1]) return
+    if (!rawOrdersToBuy[2]) return
+
+    const ordersToBuy = [
+      rawOrdersToBuy[0].order,
+      rawOrdersToBuy[1].order,
+      rawOrdersToBuy[2].order,
+    ]
+    console.log(ordersToBuy)
+
+    await nftSwap.batchBuyNfts(ordersToBuy, true)
+  }
+
   return (
     <div className="container mx-auto pt-12">
       <h1 className="font-semibold text-4xl">Swap</h1>
@@ -110,6 +134,13 @@ const Swap = () => {
               Fulfill order
             </button>
           )}
+
+          <button
+            className="font-semibold text-white text-md w-5/12 h-[42px] rounded-xl mt-28 bg-[#1275D3]"
+            onClick={batchBuyNfts}
+          >
+            Batch buy
+          </button>
         </div>
 
         <div className="flex-1">
