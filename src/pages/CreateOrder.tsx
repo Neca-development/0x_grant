@@ -1,6 +1,7 @@
 import type { SwappableAssetV4 } from '@traderxyz/nft-swap-sdk'
 import { useEthers } from '@usedapp/core'
 import { useState } from 'react'
+import { NftCollection, useCreateBasedOrder } from '../sdk-hooks/useCreateBasedOrder'
 import { useCreateOrder } from '../sdk-hooks/useCreateOrder'
 import { useQuickSwap } from '../sdk-hooks/useQuickSwap'
 import Button from '../components/Button'
@@ -18,6 +19,7 @@ function CreateOrder() {
   const { account } = useEthers()
 
   const createOrder = useCreateOrder()
+  const createBasedOrder = useCreateBasedOrder()
   const quickSwap = useQuickSwap()
 
   const [form, setForm] = useState(INITIAL_FORM_STATE)
@@ -41,6 +43,19 @@ function CreateOrder() {
 
   const handleCreateOrder = async () => {
     await createOrder(makerAsset, takerAsset, account, CHAIN_ID)
+  }
+
+  const handleCreateBasedOrder = async () => {
+    const erc20Asset: SwappableAssetV4 = {
+      tokenAddress: form.takerTokenAddress,
+      amount: form.takerTokenAmount,
+      type: 'ERC20',
+    }
+    const nftCollectionAsset: NftCollection = {
+      tokenAddress: form.makerTokenAddress,
+      type: 'ERC721',
+    }
+    await createBasedOrder(erc20Asset, nftCollectionAsset, account, CHAIN_ID)
   }
 
   const handleQuickSwap = async () => {
@@ -105,6 +120,14 @@ function CreateOrder() {
       <Button
         onClick={handleQuickSwap}
         text="Quick swap"
+        externalClasses={['bg-blue mt-12']}
+      />
+
+      <br />
+
+      <Button
+        onClick={handleCreateBasedOrder}
+        text="Create based order"
         externalClasses={['bg-blue mt-12']}
       />
     </div>

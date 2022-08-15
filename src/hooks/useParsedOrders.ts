@@ -30,7 +30,7 @@ export function useParsedOrders(searchParams?: Partial<SearchOrdersParams>) {
       }
     }
     fetchOrders()
-  }, [signer])
+  }, [rawOrders, signer])
 
   return orders
 }
