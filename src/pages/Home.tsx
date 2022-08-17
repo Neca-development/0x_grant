@@ -1,8 +1,7 @@
 import type { SearchOrdersParams } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
-import { useEthers } from '@usedapp/core'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { useWallet } from '../sdk-hooks/useWallet'
 import searchIcon from '../assets/icons/search.svg'
 import Button from '../components/Button'
 import OrderCard from '../components/OrderCard'
@@ -17,10 +16,12 @@ const searchOrderParams: Partial<SearchOrdersParams> = {
 function Home() {
   const orders = useParsedOrders(searchOrderParams)
   const navigate = useNavigate()
-  const { activateBrowserWallet } = useEthers()
+  // const { activateBrowserWallet } = useEthers()
+  const { connectWallet } = useWallet()
 
   useEffect(() => {
-    activateBrowserWallet()
+    // activateBrowserWallet()
+    if (connectWallet) connectWallet()
   }, [])
 
   return (
