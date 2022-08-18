@@ -13,7 +13,7 @@ import Home from './pages/Home'
 import MyOrders from './pages/MyOrders'
 import Swap from './pages/Swap'
 
-import { SwapSdkProvider } from './providers/swapSdkProvider'
+import { ISwapSdkConfig, SwapSdkProvider } from './providers/swapSdkProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
@@ -24,9 +24,13 @@ const config: Config = {
   },
 }
 
+const swapSdkConfig: ISwapSdkConfig = {
+  rerenderOnNetworkChange: true,
+}
+
 root.render(
   <DAppProvider config={config}>
-    <SwapSdkProvider>
+    <SwapSdkProvider config={swapSdkConfig}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />}>

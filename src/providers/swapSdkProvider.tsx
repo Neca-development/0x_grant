@@ -3,6 +3,11 @@ import { NftSwapV4 } from '@traderxyz/nft-swap-sdk'
 import { ethers } from 'ethers'
 import { ReactNode, useEffect, createContext, useState } from 'react'
 
+export interface ISwapSdkConfig {
+  reloadOnNetworkChange?: boolean
+  rerenderOnNetworkChange?: boolean
+}
+
 interface ISwapSdkContext {
   nftSwap?: NftSwapV4
 
@@ -11,8 +16,10 @@ interface ISwapSdkContext {
   network?: ethers.providers.Network
   chainId?: number
   walletAddress?: string
+  walletBalance?: ethers.BigNumber
 
   connectWallet?: () => Promise<void>
+  disconnectWallet?: () => void
 }
 
 const INITIAL_VALUE = {
@@ -23,18 +30,21 @@ const INITIAL_VALUE = {
   network: undefined,
   chainId: undefined,
   walletAddress: undefined,
+  walletBalance: undefined,
 
   connectWallet: undefined,
+  disconnectWallet: undefined,
 }
 
 export const SwapSdkContext = createContext<ISwapSdkContext>(INITIAL_VALUE)
 
 interface ISwapSdkProviderProps {
+  config?: ISwapSdkConfig
   children?: ReactNode
 }
 
 export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
-  const { children } = props
+  const { config, children } = props
 
   const [nftSwap, setNftSwap] = useState<NftSwapV4 | undefined>(INITIAL_VALUE.nftSwap)
 
@@ -48,6 +58,9 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
   const [chainId, setChainId] = useState<number | undefined>(INITIAL_VALUE.chainId)
   const [walletAddress, setWalletAddress] = useState<string | undefined>(
     INITIAL_VALUE.walletAddress
+  )
+  const [walletBalance, setWalletBalance] = useState<ethers.BigNumber | undefined>(
+    INITIAL_VALUE.walletBalance
   )
 
   const [rerender, setRerender] = useState(false)
@@ -87,8 +100,8 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     const web3WalletBalance = await web3Signer.getBalance()
     console.log('wallet balance requested')
     console.log('wallet balance: ', +web3WalletBalance)
-    // setWalletAddress(web3WalletAddress)
-    // console.log('wallet address have been set')
+    setWalletBalance(web3WalletBalance)
+    console.log('wallet balance have been set')
 
     const web3Network = web3Provider.network
     console.log('network requested')
@@ -101,6 +114,33 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     console.log('chain id: ', web3ChainId)
     setChainId(web3ChainId)
     console.log('chain id have been set')
+
+    console.groupEnd()
+    console.log('===================')
+  }
+
+  /** Disconnect browser wallet from dapp */
+  const disconnectWallet = () => {
+    console.log('===================')
+    console.group('Wallet disconnection')
+
+    setProvider(undefined)
+    console.log('provider have been unset')
+
+    setSigner(undefined)
+    console.log('signer have been unset')
+
+    setWalletAddress(undefined)
+    console.log('wallet address have been unset')
+
+    setWalletBalance(undefined)
+    console.log('wallet balance have been unset')
+
+    setNetwork(undefined)
+    console.log('network have been unset')
+
+    setChainId(undefined)
+    console.log('chain id have been unset')
 
     console.groupEnd()
     console.log('===================')
@@ -152,15 +192,28 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
       console.log('old network: ', oldNetwork)
       console.log('new network: ', newNetwork)
 
-      if (oldNetwork) {
-        // console.log('reload')
-        // window.location.reload()
-        console.log('force rerender')
-        setRerender((prev) => !prev)
+      if (!oldNetwork) {
+        console.log('first connection is not processed')
+        console.groupEnd()
+        console.log('===================')
+        return
       }
+
+      setNetwork(newNetwork)
+      console.log('network have been set')
 
       console.groupEnd()
       console.log('===================')
+
+      if (!config) return
+
+      if (config.reloadOnNetworkChange) {
+        window.location.reload()
+      }
+
+      if (config.rerenderOnNetworkChange) {
+        setRerender((prev) => !prev)
+      }
     })
   }, [provider])
 
@@ -173,8 +226,10 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     network,
     chainId,
     walletAddress,
+    walletBalance,
 
     connectWallet,
+    disconnectWallet,
   }
 
   return (
