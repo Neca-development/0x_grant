@@ -273,6 +273,18 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     })
   }, [provider])
 
+  /* Subscribe on disconnect wallet event */
+  useEffect(() => {
+    console.log('disconnect: provider changed')
+    if (!provider) {
+      console.error('Disconnect: provider is undefined')
+      return
+    }
+    console.log('disconnect: provider is defined')
+
+    window.ethereum.on('disconnect', () => disconnectWallet())
+  }, [provider])
+
   /** Defined values for context provider */
   const swapSdkProviderValue = {
     nftSwap,
