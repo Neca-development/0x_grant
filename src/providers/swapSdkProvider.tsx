@@ -3,9 +3,17 @@ import { NftSwapV4 } from '@traderxyz/nft-swap-sdk'
 import { ethers } from 'ethers'
 import { ReactNode, useEffect, createContext, useState } from 'react'
 
+declare global {
+  interface Window {
+    ethereum: any
+  }
+}
+
 export interface ISwapSdkConfig {
   reloadOnNetworkChange?: boolean
   rerenderOnNetworkChange?: boolean
+  reloadOnAccountChange?: boolean
+  rerenderOnAccountChange?: boolean
 }
 
 interface ISwapSdkContext {
@@ -15,8 +23,8 @@ interface ISwapSdkContext {
   signer?: JsonRpcSigner
   network?: ethers.providers.Network
   chainId?: number
-  walletAddress?: string
-  walletBalance?: ethers.BigNumber
+  account?: string
+  balance?: ethers.BigNumber
 
   connectWallet?: () => Promise<void>
   disconnectWallet?: () => void
@@ -29,8 +37,8 @@ const INITIAL_VALUE = {
   signer: undefined,
   network: undefined,
   chainId: undefined,
-  walletAddress: undefined,
-  walletBalance: undefined,
+  account: undefined,
+  balance: undefined,
 
   connectWallet: undefined,
   disconnectWallet: undefined,
@@ -56,11 +64,9 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     INITIAL_VALUE.network
   )
   const [chainId, setChainId] = useState<number | undefined>(INITIAL_VALUE.chainId)
-  const [walletAddress, setWalletAddress] = useState<string | undefined>(
-    INITIAL_VALUE.walletAddress
-  )
-  const [walletBalance, setWalletBalance] = useState<ethers.BigNumber | undefined>(
-    INITIAL_VALUE.walletBalance
+  const [account, setAccount] = useState<string | undefined>(INITIAL_VALUE.account)
+  const [balance, setBalance] = useState<ethers.BigNumber | undefined>(
+    INITIAL_VALUE.balance
   )
 
   const [rerender, setRerender] = useState(false)
@@ -74,14 +80,12 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     if (!window) throw new Error('Window is undefined')
     console.log('window defined')
 
-    const web3Provider = new ethers.providers.Web3Provider(
-      (window as any).ethereum,
-      'any'
-    )
+    const web3Provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     console.log('provider created')
     console.log('provider: ', web3Provider)
     await web3Provider.send('eth_requestAccounts', [])
     console.log('successfully requested accounts')
+    console.log('selected account: ', (window as any).ethereum.selectedAddress)
     setProvider(web3Provider)
     console.log('provider have been set')
 
@@ -94,13 +98,13 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     const web3WalletAddress = await web3Signer.getAddress()
     console.log('wallet address requested')
     console.log('wallet address: ', web3WalletAddress)
-    setWalletAddress(web3WalletAddress)
+    setAccount(web3WalletAddress)
     console.log('wallet address have been set')
 
     const web3WalletBalance = await web3Signer.getBalance()
     console.log('wallet balance requested')
     console.log('wallet balance: ', +web3WalletBalance)
-    setWalletBalance(web3WalletBalance)
+    setBalance(web3WalletBalance)
     console.log('wallet balance have been set')
 
     const web3Network = web3Provider.network
@@ -130,10 +134,10 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     setSigner(undefined)
     console.log('signer have been unset')
 
-    setWalletAddress(undefined)
+    setAccount(undefined)
     console.log('wallet address have been unset')
 
-    setWalletBalance(undefined)
+    setBalance(undefined)
     console.log('wallet balance have been unset')
 
     setNetwork(undefined)
@@ -141,6 +145,9 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
 
     setChainId(undefined)
     console.log('chain id have been unset')
+
+    setNftSwap(undefined)
+    console.log('swap sdk instance have been unset')
 
     console.groupEnd()
     console.log('===================')
@@ -156,7 +163,7 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
       console.error('Signer is undefined')
       return
     }
-    if (!walletAddress) {
+    if (!account) {
       console.error('Wallet address is undefined')
       return
     }
@@ -173,18 +180,18 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
 
     console.groupEnd()
     console.log('===================')
-  }, [provider, signer, chainId, walletAddress, rerender])
+  }, [provider, signer, chainId, account, rerender])
 
   /* Subscribe on network change event */
   useEffect(() => {
-    console.log('provider changed')
+    console.log('network: provider changed')
     if (!provider) {
-      console.error('Provider is undefined')
+      console.error('Network: provider is undefined')
       return
     }
-    console.log('provider is defined')
+    console.log('network: provider is defined')
 
-    provider.on('network', (newNetwork: any, oldNetwork: any) => {
+    window.ethereum.on('network', (newNetwork: any, oldNetwork: any) => {
       console.log('===================')
       console.group('Network change event handler')
 
@@ -217,6 +224,55 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     })
   }, [provider])
 
+  /* Subscribe on account change event */
+  useEffect(() => {
+    console.log('account: provider changed')
+    if (!provider) {
+      console.error('Account: provider is undefined')
+      return
+    }
+    console.log('account: provider is defined')
+
+    window.ethereum.on('accountsChanged', (accounts: any) => {
+      console.log('===================')
+      console.group('Account change event handler')
+
+      console.log('handler start')
+      console.log('accounts: ', accounts)
+
+      const newAccount = accounts[0]
+      if (!newAccount) {
+        console.error('Account: selected account is undefined')
+        console.groupEnd()
+        console.log('===================')
+        return
+      }
+
+      if (newAccount === account) {
+        console.log('new account is equal to old one')
+        console.groupEnd()
+        console.log('===================')
+        return
+      }
+
+      setAccount(newAccount)
+      console.log('account have been set')
+
+      console.groupEnd()
+      console.log('===================')
+
+      if (!config) return
+
+      if (config.reloadOnAccountChange) {
+        window.location.reload()
+      }
+
+      if (config.rerenderOnNetworkChange) {
+        setRerender((prev) => !prev)
+      }
+    })
+  }, [provider])
+
   /** Defined values for context provider */
   const swapSdkProviderValue = {
     nftSwap,
@@ -225,8 +281,8 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
     signer,
     network,
     chainId,
-    walletAddress,
-    walletBalance,
+    account,
+    balance,
 
     connectWallet,
     disconnectWallet,

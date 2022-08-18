@@ -26,6 +26,7 @@ const config: Config = {
 
 const swapSdkConfig: ISwapSdkConfig = {
   rerenderOnNetworkChange: true,
+  rerenderOnAccountChange: true,
 }
 
 root.render(
