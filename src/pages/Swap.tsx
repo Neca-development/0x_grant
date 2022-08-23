@@ -4,7 +4,7 @@ import {
   SearchOrdersParams,
   PostOrderResponsePayload,
 } from '@traderxyz/nft-swap-sdk/dist/sdk/v4/orderbook'
-import { useEthers } from '@usedapp/core'
+import { useWallet } from '../sdk-hooks/useWallet'
 import { useFulfillOrder } from '../sdk-hooks/useFulfillOrder'
 import { SwapSdkContext } from '../providers/swapSdkProvider'
 import { NFT_COLLECTION } from '../constants/collection'
@@ -64,7 +64,7 @@ const Swap = () => {
     nonce: state.nonce,
   }
 
-  const { account } = useEthers()
+  const { account } = useWallet()
 
   const fulfillOrder = useFulfillOrder()
 

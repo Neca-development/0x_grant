@@ -16,11 +16,9 @@ const searchOrderParams: Partial<SearchOrdersParams> = {
 function Home() {
   const orders = useParsedOrders(searchOrderParams)
   const navigate = useNavigate()
-  // const { activateBrowserWallet } = useEthers()
   const { connectWallet } = useWallet()
 
   useEffect(() => {
-    // activateBrowserWallet()
     if (connectWallet) connectWallet()
   }, [])
 

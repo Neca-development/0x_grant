@@ -73,151 +73,75 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
 
   /** Connect browser wallet to dapp */
   const connectWallet = async () => {
-    console.log('===================')
-    console.group('Wallet connection')
-
-    console.log('connection start')
     if (!window) throw new Error('Window is undefined')
-    console.log('window defined')
 
     const web3Provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    console.log('provider created')
-    console.log('provider: ', web3Provider)
     await web3Provider.send('eth_requestAccounts', [])
-    console.log('successfully requested accounts')
-    console.log('selected account: ', (window as any).ethereum.selectedAddress)
     setProvider(web3Provider)
-    console.log('provider have been set')
 
     const web3Signer = web3Provider.getSigner()
-    console.log('signer requested')
-    console.log('signer: ', web3Signer)
     setSigner(web3Signer)
-    console.log('signer have been set')
 
     const web3WalletAddress = await web3Signer.getAddress()
-    console.log('wallet address requested')
-    console.log('wallet address: ', web3WalletAddress)
     setAccount(web3WalletAddress)
-    console.log('wallet address have been set')
 
     const web3WalletBalance = await web3Signer.getBalance()
-    console.log('wallet balance requested')
-    console.log('wallet balance: ', +web3WalletBalance)
     setBalance(web3WalletBalance)
-    console.log('wallet balance have been set')
 
     const web3Network = web3Provider.network
-    console.log('network requested')
-    console.log('network: ', web3Network)
     setNetwork(web3Network)
-    console.log('network have been set')
 
     const web3ChainId = await web3Signer.getChainId()
-    console.log('chain id requested')
-    console.log('chain id: ', web3ChainId)
     setChainId(web3ChainId)
-    console.log('chain id have been set')
-
-    console.groupEnd()
-    console.log('===================')
   }
 
   /** Disconnect browser wallet from dapp */
   const disconnectWallet = () => {
-    console.log('===================')
-    console.group('Wallet disconnection')
-
     setProvider(undefined)
-    console.log('provider have been unset')
-
     setSigner(undefined)
-    console.log('signer have been unset')
-
     setAccount(undefined)
-    console.log('wallet address have been unset')
-
     setBalance(undefined)
-    console.log('wallet balance have been unset')
-
     setNetwork(undefined)
-    console.log('network have been unset')
-
     setChainId(undefined)
-    console.log('chain id have been unset')
-
     setNftSwap(undefined)
-    console.log('swap sdk instance have been unset')
-
-    console.groupEnd()
-    console.log('===================')
   }
 
   /* Create Swap SDK instance */
   useEffect(() => {
     if (!provider) {
-      console.error('Provider is undefined')
+      console.warn('Swap SDK init: provider is undefined')
       return
     }
     if (!signer) {
-      console.error('Signer is undefined')
+      console.warn('Swap SDK init: signer is undefined')
       return
     }
     if (!account) {
-      console.error('Wallet address is undefined')
+      console.warn('Swap SDK init: wallet address is undefined')
       return
     }
 
-    console.log('===================')
-    console.group('Swap SDK instance creation')
-
-    console.log('creation start')
     const nftSwapInstance = new NftSwapV4(provider, signer, chainId)
-    console.log('instance created')
-    console.log('instance: ', nftSwapInstance)
     setNftSwap(nftSwapInstance)
-    console.log('instance have been set')
-
-    console.groupEnd()
-    console.log('===================')
   }, [provider, signer, chainId, account, rerender])
 
   /* Subscribe on network change event */
   useEffect(() => {
-    console.log('network: provider changed')
     if (!provider) {
-      console.error('Network: provider is undefined')
+      console.warn('Network change event handler: provider is undefined')
       return
     }
-    console.log('network: provider is defined')
 
-    window.ethereum.on('network', (newNetwork: any, oldNetwork: any) => {
-      console.log('===================')
-      console.group('Network change event handler')
-
-      console.log('handler start')
-      console.log('old network: ', oldNetwork)
-      console.log('new network: ', newNetwork)
-
-      if (!oldNetwork) {
-        console.log('first connection is not processed')
-        console.groupEnd()
-        console.log('===================')
-        return
-      }
+    provider.on('network', (newNetwork: any, oldNetwork: any) => {
+      if (!oldNetwork) return
 
       setNetwork(newNetwork)
-      console.log('network have been set')
-
-      console.groupEnd()
-      console.log('===================')
 
       if (!config) return
 
       if (config.reloadOnNetworkChange) {
         window.location.reload()
       }
-
       if (config.rerenderOnNetworkChange) {
         setRerender((prev) => !prev)
       }
@@ -226,48 +150,30 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
 
   /* Subscribe on account change event */
   useEffect(() => {
-    console.log('account: provider changed')
     if (!provider) {
-      console.error('Account: provider is undefined')
+      console.warn('Account change event handler: provider is undefined')
       return
     }
-    console.log('account: provider is defined')
 
-    window.ethereum.on('accountsChanged', (accounts: any) => {
-      console.log('===================')
-      console.group('Account change event handler')
-
-      console.log('handler start')
-      console.log('accounts: ', accounts)
-
+    window.ethereum.on('accountsChanged', (accounts: string[]) => {
       const newAccount = accounts[0]
       if (!newAccount) {
-        console.error('Account: selected account is undefined')
-        console.groupEnd()
-        console.log('===================')
+        disconnectWallet()
         return
       }
 
       if (newAccount === account) {
-        console.log('new account is equal to old one')
-        console.groupEnd()
-        console.log('===================')
         return
       }
 
       setAccount(newAccount)
-      console.log('account have been set')
-
-      console.groupEnd()
-      console.log('===================')
 
       if (!config) return
 
       if (config.reloadOnAccountChange) {
         window.location.reload()
       }
-
-      if (config.rerenderOnNetworkChange) {
+      if (config.rerenderOnAccountChange) {
         setRerender((prev) => !prev)
       }
     })
@@ -275,12 +181,10 @@ export const SwapSdkProvider = (props: ISwapSdkProviderProps) => {
 
   /* Subscribe on disconnect wallet event */
   useEffect(() => {
-    console.log('disconnect: provider changed')
     if (!provider) {
-      console.error('Disconnect: provider is undefined')
+      console.warn('Disconnect event handler: provider is undefined')
       return
     }
-    console.log('disconnect: provider is defined')
 
     window.ethereum.on('disconnect', () => disconnectWallet())
   }, [provider])

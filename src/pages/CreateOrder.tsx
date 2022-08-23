@@ -1,6 +1,6 @@
 import type { SwappableAssetV4 } from '@traderxyz/nft-swap-sdk'
-import { useEthers } from '@usedapp/core'
 import { useState } from 'react'
+import { useWallet } from '../sdk-hooks/useWallet'
 import { NftCollection, useCreateBasedOrder } from '../sdk-hooks/useCreateBasedOrder'
 import { useCreateOrder } from '../sdk-hooks/useCreateOrder'
 import { useQuickSwap } from '../sdk-hooks/useQuickSwap'
@@ -16,7 +16,7 @@ const INITIAL_FORM_STATE = {
 const CHAIN_ID = 3
 
 function CreateOrder() {
-  const { account } = useEthers()
+  const { account } = useWallet()
 
   const createOrder = useCreateOrder()
   const createBasedOrder = useCreateBasedOrder()
